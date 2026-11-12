@@ -83,7 +83,38 @@ _To be completed._
 
 ## 3. Data enrichment
 
-_To be completed._
+Prerequisite: `title.basics`, `title.ratings`, `title.principals` and
+`name.basics` converted to Parquet (setup step 4).
+
+1. Select the films and principals to enrich (Spark): feature films
+   (>= 40 min) released 1980-2025, top 10 per (year, genre) by number of
+   votes, first 3 principals of each film:
+
+   ```bash
+   docker compose exec spark python -m src.enrichment.select_targets
+   ```
+
+   Parameters: `--year-from`, `--year-to`, `--min-runtime`, `--top-n`,
+   `--principals` (`--top-n 0 --principals 0` = full dataset).
+
+2. Gather the raw data from Wikidata and English Wikipedia (plain Python,
+   rate limited, resumable — simply re-run it after an interruption):
+
+   ```bash
+   docker compose exec spark python -m src.enrichment.fetch_wikipedia
+   ```
+
+   Use `--limit 50` for a quick test. A full run takes about 1 hour.
+   Raw API answers are stored in `data/enrichment/raw/*.jsonl`.
+
+3. Clean, enforce the schema, add the lineage and join with IMDb (Spark):
+
+   ```bash
+   docker compose exec spark python -m src.enrichment.build_enriched
+   ```
+
+   Outputs in `data/enrichment/output/`: `films/` (synopses, partitioned
+   by year), `principals/` (biographies) and `coverage/` (CSV summary).
 
 ## 4. Streaming data processing
 
