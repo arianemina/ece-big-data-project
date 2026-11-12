@@ -94,7 +94,40 @@ environment variables listed at the top of each script. Results go to
 
 ## Data enrichment
 
-TODO
+Run after the preparation step (it reads the cleaned tables):
+
+```bash
+scripts/run_enrichment.sh
+```
+
+This runs, in order:
+
+1. `imdb.enrichment.select_targets` (Spark): feature-length movies released
+   1980-2025, top 10 per (year, genre) by number of votes, and the first 3
+   principals of each selected film (IMDb billing order).
+2. `imdb.enrichment.fetch_wikipedia` (plain Python, outside Spark): maps the
+   IMDb IDs to Wikidata items and English Wikipedia articles (Wikidata
+   property P345), then downloads the film articles (plain text) and the
+   lead sections of the principals. Requests are sent one at a time below
+   the Wikimedia limit (about 170 per minute, `Retry-After` and `maxlag`
+   honoured) with a User-Agent containing a contact URL. The raw answers are
+   appended to `data/enrichment/raw/*.jsonl`; the script is resumable. A full
+   run takes about 1 hour (`--limit 50` for a quick test).
+3. `imdb.enrichment.build_enriched` (Spark): schema enforcement, plot
+   section extraction, text cleaning, joins with IMDb, `lineage` column
+   (source permalink, Wikidata URI, revision, retrieval time, license) and
+   `enrichment_note` when information is missing.
+
+Enriched datasets: `data/enrichment/enriched/films` (partitioned by year)
+and `data/enrichment/enriched/principals`. Report tables:
+`output/enrichment`.
+
+| Variable | Default | Meaning |
+| --- | --- | --- |
+| `FIRST_YEAR`, `LAST_YEAR` | 1980, 2025 | release years |
+| `ENRICH_TOP_N` | 10 | films per (year, genre), 0 = all |
+| `ENRICH_PRINCIPALS` | 3 | principals per film, 0 = all |
+| `WIKI_USER_AGENT` | project URL | User-Agent sent to Wikimedia |
 
 ## Streaming data processing
 

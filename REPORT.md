@@ -64,7 +64,25 @@ TODO (written by the team)
 
 ## Data enrichment
 
-TODO
+### Selected films and principals
+
+<!-- RESULTS: targets_summary -->
+
+### Coverage of the enrichment
+
+<!-- RESULTS: coverage -->
+
+### Notes on missing information
+
+<!-- RESULTS: film_notes, principal_notes -->
+
+### Sample of enriched records
+
+<!-- RESULTS: films_sample, principals_sample -->
+
+### Methodological explanation
+
+TODO (written by the team)
 
 ## Streaming data processing
 
