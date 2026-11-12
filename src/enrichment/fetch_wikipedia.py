@@ -35,7 +35,7 @@ from src.enrichment.wiki_client import RateLimitedClient
 SPARQL_BATCH = 200
 PEOPLE_BATCH = 20          # MediaWiki limit for intro extracts per request
 WIKIDATA_INTERVAL = 1.0    # seconds between SPARQL queries
-WIKIPEDIA_INTERVAL = 0.2   # seconds between MediaWiki API calls (5 req/s)
+WIKIPEDIA_INTERVAL = 0.35  # ~170 req/min, below the 200 req/min limit
 
 FILM_QUERY = """
 SELECT ?imdb ?item ?article WHERE {

@@ -12,8 +12,11 @@ import time
 
 import requests
 
+# Wikimedia rate limits (2026): 10 req/min for clients without contact
+# information in their User-Agent, 200 req/min with it.
 DEFAULT_USER_AGENT = (
-    "ECEBigDataStudentProject/1.0 (educational use; python-requests)"
+    "ECEBigDataProject/1.0 "
+    "(https://github.com/arianemina/ece-big-data-project) python-requests"
 )
 
 
