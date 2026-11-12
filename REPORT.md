@@ -61,3 +61,11 @@ TODO (written by the team)
 ### Methodological explanation
 
 TODO (written by the team)
+
+## Data enrichment
+
+TODO
+
+## Streaming data processing
+
+TODO
