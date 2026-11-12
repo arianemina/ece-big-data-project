@@ -67,7 +67,11 @@ EVENT_SCHEMA = T.StructType([
 
 
 class ProgressLogger(StreamingQueryListener):
-    """Append every query progress report to a JSON Lines file."""
+    """Append every query progress report to a JSON Lines file.
+
+    It also prints one line per micro-batch, which serves as the live view
+    of the job (a separate console sink would duplicate the join).
+    """
 
     def __init__(self, path):
         self.path = path
@@ -223,13 +227,6 @@ def main():
                 "article_edits", "bot_edits")
     )
     sink(traffic, "traffic_windows")
-
-    # live view in the console
-    (matched.select("event_time", "title", "imdb_id", "entity_type",
-                    "match_type", "user", "bytes_delta", "is_late")
-     .writeStream.queryName("console").outputMode("append")
-     .format("console").option("truncate", False).option("numRows", 20)
-     .trigger(processingTime=args.trigger).start())
 
     timeout = args.duration_minutes * 60 if args.duration_minutes else None
     spark.streams.awaitAnyTermination(timeout)

@@ -9,9 +9,9 @@ candidate Wikipedia titles to IMDb entities:
 2. ``imdb_title``: movies and TV series with at least ``--min-votes`` votes,
    as "Title", "Title (film)", "Title (YYYY film)", "Title (TV series)",
    "Title (YYYY TV series)", "Title (miniseries)";
-3. ``imdb_person``: principals (cast and crew) of those titles, as "Name",
-   "Name (actor)", "Name (actress)", "Name (director)", "Name (filmmaker)",
-   "Name (screenwriter)", "Name (producer)", "Name (composer)".
+3. ``imdb_person``: principals (cast and crew) of those titles, as "Name"
+   and "Name (<job>)" for the jobs they held, e.g. "Name (actor)",
+   "Name (director)", "Name (filmmaker)", "Name (screenwriter)".
 
 When several IMDb entities share a key, the most popular one is kept and
 the number of candidates is recorded (``n_candidates``).
@@ -31,15 +31,25 @@ from src.streaming import config as C
 
 FILM_TYPES = ["movie", "tvMovie"]
 SERIES_TYPES = ["tvSeries", "tvMiniSeries"]
-PERSON_CATEGORIES = ["actor", "actress", "self", "director", "writer",
-                     "producer", "composer"]
-PERSON_SUFFIXES = ["actor", "actress", "director", "filmmaker",
-                   "screenwriter", "producer", "composer"]
+# IMDb category -> disambiguation suffixes used by Wikipedia article titles
+PERSON_SUFFIXES = {
+    "actor": ["actor"],
+    "actress": ["actress", "actor"],
+    "director": ["director", "filmmaker"],
+    "writer": ["writer", "screenwriter"],
+    "producer": ["producer"],
+    "composer": ["composer", "musician"],
+}
 PRIORITY = {"enriched_article": 0, "imdb_title": 1, "imdb_person": 2}
 
 
 def key(col):
     return F.lower(F.trim(col))
+
+
+def explode_keys(variants):
+    """One normalised match key per variant."""
+    return F.explode(F.array_distinct(F.transform(variants, key)))
 
 
 def title_keys(basics, ratings, min_votes):
@@ -67,7 +77,7 @@ def title_keys(basics, ratings, min_votes):
         )
     )
     return titles.select(
-        key(F.explode(variants)).alias("match_key"),
+        explode_keys(variants).alias("match_key"),
         F.when(is_film, "film").otherwise("series").alias("entity_type"),
         F.col("tconst").alias("imdb_id"),
         F.col("primaryTitle").alias("imdb_name"),
@@ -77,19 +87,33 @@ def title_keys(basics, ratings, min_votes):
 
 
 def person_keys(principals, names, titles):
-    people = (
-        principals.filter(F.col("category").isin(PERSON_CATEGORIES))
+    """Name keys of the cast and crew of the reference titles.
+
+    Each person gets the bare name plus the disambiguation suffixes that
+    match the jobs they actually held (e.g. "(actress)" only for actresses)
+    to keep the lookup table small.
+    """
+    suffix_map = F.create_map(*[x for cat, sfx in PERSON_SUFFIXES.items()
+                                for x in (F.lit(cat), F.array(
+                                    *[F.lit(v) for v in sfx]))])
+    credits = (
+        principals.filter(F.col("category").isin(list(PERSON_SUFFIXES)))
         .join(titles.select("tconst", "numVotes"), "tconst")
-        .groupBy("nconst").agg(F.sum("numVotes").alias("popularity"))
+    )
+    people = (
+        credits.groupBy("nconst").agg(
+            F.sum("numVotes").cast("long").alias("popularity"),
+            F.array_distinct(F.flatten(F.collect_set(
+                suffix_map[F.col("category")]))).alias("suffixes"))
         .join(names.select("nconst", "primaryName"), "nconst")
     )
-    variants = F.array(
-        F.col("primaryName"),
-        *[F.concat_ws("", "primaryName", F.lit(f" ({s})"))
-          for s in PERSON_SUFFIXES],
+    variants = F.concat(
+        F.array(F.col("primaryName")),
+        F.transform("suffixes", lambda sfx: F.concat_ws(
+            "", F.col("primaryName"), F.lit(" ("), sfx, F.lit(")"))),
     )
     return people.select(
-        key(F.explode(variants)).alias("match_key"),
+        explode_keys(variants).alias("match_key"),
         F.lit("person").alias("entity_type"),
         F.col("nconst").alias("imdb_id"),
         F.col("primaryName").alias("imdb_name"),
@@ -139,10 +163,10 @@ def main():
 
     t_keys, titles = title_keys(basics, ratings, args.min_votes)
     p_keys = person_keys(principals, names, titles)
-    candidates = t_keys.unionByName(
-        p_keys.withColumn("popularity", F.col("popularity").cast("long")),
-        allowMissingColumns=False,
-    ).withColumn("popularity", F.col("popularity").cast("long"))
+    candidates = (
+        t_keys.withColumn("popularity", F.col("popularity").cast("long"))
+        .unionByName(p_keys)
+    )
     for part in enriched_keys(spark):
         candidates = candidates.unionByName(part)
 
