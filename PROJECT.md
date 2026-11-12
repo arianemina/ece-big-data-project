@@ -73,6 +73,26 @@ inside the `spark` container.
 
 All the following commands are run from the repository root on the host.
 
+## 1. Data preparation
+
+_To be completed._
+
+## 2. Data exploration
+
+_To be completed._
+
+## 3. Data enrichment
+
+_To be completed._
+
+## 4. Streaming data processing
+
+_To be completed._
+
+## 5. Open question
+
+_To be completed._
+
 ## Stopping and cleaning up
 
 ```bash
