@@ -26,6 +26,7 @@ def get_spark(app_name, with_kafka=False, shuffle_partitions=8):
         .config("spark.sql.shuffle.partitions", str(shuffle_partitions))
         .config("spark.sql.session.timeZone", "UTC")
         .config("spark.sql.adaptive.enabled", "true")
+        .config("spark.ui.showConsoleProgress", "false")
     )
     if with_kafka:
         builder = builder.config("spark.jars.packages", KAFKA_PACKAGE)

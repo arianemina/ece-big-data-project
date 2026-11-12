@@ -41,9 +41,9 @@ services:
     environment:
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       SPARK_DRIVER_MEMORY: 2g
-      # Wikimedia asks API clients to send a descriptive User-Agent.
-      # Override it with your own contact (e.g. in a .env file) if you wish.
-      WIKI_USER_AGENT: ${WIKI_USER_AGENT:-ECEBigDataStudentProject/1.0 (educational use; python-requests)}
+      # Wikimedia requires a User-Agent with contact information; clients
+      # without one are limited to 10 requests/minute (200 with it).
+      WIKI_USER_AGENT: ${WIKI_USER_AGENT:-ECEBigDataProject/1.0 (https://github.com/arianemina/ece-big-data-project) python-requests/2.34}
     volumes:
       - ./:/home/jovyan/work
       - ivy-cache:/home/jovyan/.ivy2
