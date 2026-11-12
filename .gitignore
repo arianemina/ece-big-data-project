@@ -1,0 +1,19 @@
+# Data and generated outputs (never committed)
+data/
+checkpoints/
+.ivy2/
+spark-warehouse/
+metastore_db/
+derby.log
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
+
+# OS / editors
+.DS_Store
+.vscode/
+.idea/
+.env

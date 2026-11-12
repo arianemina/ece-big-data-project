@@ -1,0 +1,53 @@
+# Local big data stack: single-node Kafka (KRaft) + Spark/Python runtime.
+# Usage is documented in PROJECT.md.
+services:
+  kafka:
+    image: apache/kafka:3.9.1
+    container_name: kafka
+    ports:
+      - "9094:9094"   # access from the host machine
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: INTERNAL://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://localhost:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_NUM_PARTITIONS: 3
+      KAFKA_LOG_RETENTION_HOURS: 24
+      KAFKA_HEAP_OPTS: "-Xms256m -Xmx512m"
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 10s
+      retries: 12
+
+  spark:
+    build: .
+    image: ece-bigdata-spark:latest
+    container_name: spark
+    depends_on:
+      kafka:
+        condition: service_healthy
+    ports:
+      - "8888:8888"   # JupyterLab (optional, for exploration notebooks)
+      - "4040:4040"   # Spark UI of the running job
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPARK_DRIVER_MEMORY: 2g
+      # Wikimedia asks API clients to send a descriptive User-Agent.
+      # Override it with your own contact (e.g. in a .env file) if you wish.
+      WIKI_USER_AGENT: ${WIKI_USER_AGENT:-ECEBigDataStudentProject/1.0 (educational use; python-requests)}
+    volumes:
+      - ./:/home/jovyan/work
+      - ivy-cache:/home/jovyan/.ivy2
+    command: start-notebook.py --IdentityProvider.token=''
+
+volumes:
+  ivy-cache:
