@@ -98,7 +98,49 @@ TODO
 
 ## Streaming data processing
 
-TODO
+Needs Kafka, so run it with Docker (`docker compose up -d --build`), after
+the preparation step. If the enrichment output exists, its exact Wikipedia
+article titles are used for matching as well.
+
+1. Build the IMDb lookup table used to filter the stream (Spark):
+
+   ```bash
+   docker compose exec spark python -m imdb.streaming.build_reference
+   ```
+
+2. In a first terminal, start the Structured Streaming job (it stops by
+   itself after `--duration-minutes`, 20 by default):
+
+   ```bash
+   docker compose exec spark python -m imdb.streaming.stream_processor --duration-minutes 25
+   ```
+
+3. In a second terminal, start the producer that forwards the Wikimedia
+   EventStreams `recentchange` feed to the Kafka topic
+   `wikipedia.recentchange`:
+
+   ```bash
+   docker compose exec spark python -m imdb.streaming.producer --duration-minutes 22
+   ```
+
+4. Optional, to test late data: while the job runs, replay events from 30
+   minutes ago (older than the 10-minute watermark):
+
+   ```bash
+   docker compose exec spark python -m imdb.streaming.producer --since-minutes 30 --max-events 3000
+   ```
+
+5. When the job has stopped, write the result tables to `output/streaming`:
+
+   ```bash
+   docker compose exec spark python -m imdb.streaming.summarize
+   ```
+
+Sinks (Parquet): `data/streaming/sinks/` (`matched_events`,
+`entity_windows`, `traffic_windows`); per-batch metrics:
+`data/streaming/metrics/progress.jsonl`. To start again from a clean state,
+delete `data/streaming/checkpoints`, `data/streaming/sinks` and
+`data/streaming/metrics`.
 
 ## Tests
 

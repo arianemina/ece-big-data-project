@@ -68,4 +68,30 @@ TODO
 
 ## Streaming data processing
 
-TODO
+### Overview of the test run
+
+<!-- RESULTS: overview, query_metrics -->
+
+### Matches by type and most edited IMDb entities
+
+<!-- RESULTS: matches_by_type, top_entities -->
+
+### Finalised event-time windows
+
+<!-- RESULTS: finalised_windows -->
+
+### Late events
+
+<!-- RESULTS: late_events -->
+
+### Matched events
+
+<!-- RESULTS: matched_events -->
+
+### Handling of late-arriving data
+
+TODO (written by the team)
+
+### Methodological explanation
+
+TODO (written by the team)
