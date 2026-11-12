@@ -1,0 +1,13 @@
+# Data and generated outputs
+data/
+output/*
+!output/.gitkeep
+spark-warehouse/
+metastore_db/
+derby.log
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
