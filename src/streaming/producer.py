@@ -26,7 +26,8 @@ from src.streaming import config as C
 
 USER_AGENT = os.environ.get(
     "WIKI_USER_AGENT",
-    "ECEBigDataStudentProject/1.0 (educational use; python-requests)",
+    "ECEBigDataProject/1.0 "
+    "(https://github.com/arianemina/ece-big-data-project) python-requests",
 )
 
 
