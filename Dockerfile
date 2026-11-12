@@ -5,3 +5,8 @@ COPY requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 WORKDIR /home/jovyan/work
+
+# Make pyspark importable from any shell (not only from the notebook start hooks)
+ENV PYTHONPATH=/usr/local/spark/python:/usr/local/spark/python/lib/py4j-0.10.9.9-src.zip \
+    PYSPARK_PYTHONPATH_SET=1 \
+    PYTHONUNBUFFERED=1
