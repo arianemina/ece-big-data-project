@@ -50,6 +50,28 @@ This runs, in order:
 Results are written to `output/preparation` as CSV files and Markdown
 previews.
 
+## Data exploration
+
+Run after the preparation step:
+
+```bash
+scripts/run_exploration.sh
+```
+
+| Script | Question |
+| --- | --- |
+| `q1_runtime_outliers` | Feature-length movies whose runtime is far from their genre average |
+| `q2_q3_top_genres` | Top 3 genres per year (1980-2025) and comparison with the other genres |
+| `q4_directors` | Directors with one movie rated 8+ and several movies rated 6 or less |
+| `q5_tv_series` | Series whose worst episode is in the last season and best in the first two |
+| `q6_multilingual_actors` | Actors successful in films of 2+ and 3+ original languages |
+| `q7_early_peak` | Actors with 20+ year careers and 15+ movies who peaked early |
+| `q8_multi_talented` | Actor / director / writer profiles and their multi-role performance |
+
+Thresholds (minimum votes, z-score, success rating) can be changed with the
+environment variables listed at the top of each script. Results go to
+`output/exploration`.
+
 ## Tests
 
 ```bash
