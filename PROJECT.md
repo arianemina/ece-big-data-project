@@ -87,7 +87,50 @@ _To be completed._
 
 ## 4. Streaming data processing
 
-_To be completed._
+Prerequisite: `title.basics`, `title.ratings`, `title.principals` and
+`name.basics` converted to Parquet (setup step 4). If the enrichment output
+exists, its exact Wikipedia article titles are also used for matching.
+
+1. Build the IMDb lookup table used to filter the stream (Spark):
+
+   ```bash
+   docker compose exec spark python -m src.streaming.build_reference
+   ```
+
+2. In a first terminal, start the Spark Structured Streaming job (it stops
+   by itself after `--duration-minutes`, 20 by default):
+
+   ```bash
+   docker compose exec spark python -m src.streaming.stream_processor --duration-minutes 20
+   ```
+
+3. In a second terminal, start the producer that forwards the Wikimedia
+   EventStreams `recentchange` feed to the Kafka topic
+   `wikipedia.recentchange`:
+
+   ```bash
+   docker compose exec spark python -m src.streaming.producer --duration-minutes 20
+   ```
+
+4. Optional — inject late-arriving data while the job is running: replay
+   events from 30 minutes ago (older than the 10-minute watermark):
+
+   ```bash
+   docker compose exec spark python -m src.streaming.producer --since-minutes 30 --max-events 20000
+   ```
+
+5. When the job has stopped, print the result tables and metrics:
+
+   ```bash
+   docker compose exec spark python -m src.streaming.summarize
+   ```
+
+   Outputs in `data/streaming/output/` (`matched_events/`,
+   `entity_windows/`, `traffic_windows/`, `summary.md`) and per-batch
+   metrics in `data/streaming/metrics/progress.jsonl`.
+
+To restart from a clean state, delete `data/streaming/checkpoints/`,
+`data/streaming/output/` and `data/streaming/metrics/`.
 
 ## 5. Open question
 
