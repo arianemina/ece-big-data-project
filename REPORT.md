@@ -134,90 +134,88 @@ TODO (written by the team)
 
 | genre | outliers | longer | shorter | movies | outlier_pct |
 | --- | --- | --- | --- | --- | --- |
-| Action | 256 | 256 | 0 | 40345 | 0.63 |
-| Adventure | 301 | 301 | 0 | 24018 | 1.25 |
-| Animation | 89 | 89 | 0 | 8328 | 1.07 |
-| Biography | 164 | 164 | 0 | 16102 | 1.02 |
-| Comedy | 285 | 285 | 0 | 95735 | 0.30 |
-| Crime | 273 | 273 | 0 | 34401 | 0.79 |
-| Documentary | 31 | 31 | 0 | 116086 | 0.03 |
-| Drama | 533 | 533 | 0 | 196063 | 0.27 |
-| Family | 66 | 66 | 0 | 15947 | 0.41 |
-| Fantasy | 62 | 62 | 0 | 12590 | 0.49 |
-| Film-Noir | 3 | 3 | 0 | 878 | 0.34 |
-| History | 76 | 76 | 0 | 13633 | 0.56 |
-| Horror | 217 | 217 | 0 | 30543 | 0.71 |
-| Music | 39 | 39 | 0 | 13972 | 0.28 |
-| Musical | 42 | 42 | 0 | 8496 | 0.49 |
-| Mystery | 31 | 31 | 0 | 16425 | 0.19 |
-| News | 19 | 19 | 0 | 1409 | 1.35 |
-| Reality-TV | 1 | 1 | 0 | 297 | 0.34 |
-| Romance | 290 | 290 | 0 | 42189 | 0.69 |
-| Sci-Fi | 60 | 60 | 0 | 9772 | 0.61 |
+| Action | 732 | 396 | 336 | 40345 | 1.81 |
+| Adventure | 663 | 392 | 271 | 24018 | 2.76 |
+| Animation | 77 | 77 | 0 | 8328 | 0.92 |
+| Biography | 32 | 32 | 0 | 16102 | 0.20 |
+| Comedy | 3928 | 1107 | 2821 | 95735 | 4.10 |
+| Crime | 579 | 248 | 331 | 34401 | 1.68 |
+| Documentary | 505 | 505 | 0 | 116086 | 0.44 |
+| Drama | 1854 | 811 | 1043 | 196063 | 0.95 |
+| Family | 67 | 64 | 3 | 15947 | 0.42 |
+| Fantasy | 271 | 110 | 161 | 12590 | 2.15 |
+| History | 75 | 75 | 0 | 13633 | 0.55 |
+| Horror | 1441 | 355 | 1086 | 30543 | 4.72 |
+| Music | 66 | 66 | 0 | 13972 | 0.47 |
+| Musical | 37 | 37 | 0 | 8496 | 0.44 |
+| Mystery | 271 | 84 | 187 | 16425 | 1.65 |
+| News | 17 | 17 | 0 | 1409 | 1.21 |
+| Reality-TV | 4 | 4 | 0 | 297 | 1.35 |
+| Romance | 393 | 126 | 267 | 42189 | 0.93 |
+| Sci-Fi | 302 | 90 | 212 | 9772 | 3.09 |
 | Sport | 36 | 36 | 0 | 6811 | 0.53 |
-| Talk-Show | 1 | 1 | 0 | 102 | 0.98 |
-| Thriller | 284 | 284 | 0 | 34038 | 0.83 |
-| War | 83 | 83 | 0 | 8049 | 1.03 |
-| Western | 101 | 101 | 0 | 6354 | 1.59 |
+| Thriller | 899 | 199 | 700 | 34038 | 2.64 |
+| War | 86 | 83 | 3 | 8049 | 1.07 |
+| Western | 44 | 44 | 0 | 6354 | 0.69 |
 
-_25 rows in total._
+_23 rows in total._
 
 **q1_runtime_outliers**
 
-| genre | tconst | primaryTitle | startYear | runtimeMinutes | genre_avg_runtime | genre_std_runtime | z_score | direction |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Documentary | tt8273150 | Logistics | 2012 | 51420 | 78.05 | 223.52 | 229.70 | longer |
-| Documentary | tt3854496 | Ambiancé | 2020 | 43200 | 78.05 | 223.52 | 192.92 | longer |
-| Comedy | tt5136218 | London EC1 | 2015 | 5460 | 93.30 | 28.74 | 186.73 | longer |
-| Drama | tt5068890 | Hunger! | 2015 | 6000 | 96.10 | 37.00 | 159.57 | longer |
-| Drama | tt1806963 | Matrjoschka | 2006 | 5700 | 96.10 | 37.00 | 151.46 | longer |
-| Drama | tt5136218 | London EC1 | 2015 | 5460 | 96.10 | 37.00 | 144.97 | longer |
-| Documentary | tt12277054 | Carnets Filmés (Liste Complète) | 2019 | 28643 | 78.05 | 223.52 | 127.80 | longer |
-| Mystery | tt5136218 | London EC1 | 2015 | 5460 | 94.39 | 50.44 | 106.38 | longer |
-| Music | tt0284020 | The Cure for Insomnia | 1987 | 5220 | 88.44 | 57.67 | 88.98 | longer |
-| Drama | tt3837350 | A 2nd generation film | 2013 | 3077 | 96.10 | 37.00 | 80.57 | longer |
-| Drama | tt0342707 | The Longest Most Meaningless Movie in the World | 1970 | 2880 | 96.10 | 37.00 | 75.24 | longer |
-| Family | tt1866307 | World Peace & Prayer Day | 2011 | 2400 | 92.26 | 31.41 | 73.46 | longer |
-| Documentary | tt2659636 | Modern Times Forever | 2011 | 14400 | 78.05 | 223.52 | 64.07 | longer |
-| Action | tt7321476 | h36: | 2017 | 2160 | 101.22 | 33.75 | 61.00 | longer |
-| Horror | tt7521772 | 24 Hour Psycho | 1993 | 1440 | 88.68 | 22.26 | 60.70 | longer |
-| Comedy | tt1885195 | Azgrab: The Documentary | 2011 | 1669 | 93.30 | 28.74 | 54.82 | longer |
-| History | tt5135246 | Saynatakuna: Masks | 2013 | 2905 | 94.30 | 52.86 | 53.17 | longer |
-| History | tt0342707 | The Longest Most Meaningless Movie in the World | 1970 | 2880 | 94.30 | 52.86 | 52.70 | longer |
-| Drama | tt0387271 | A Twist of Fate | 1970 | 1970 | 96.10 | 37.00 | 50.65 | longer |
-| Fantasy | tt0165127 | Burning of the Red Lotus Temple | 1928 | 1620 | 94.07 | 31.90 | 47.84 | longer |
-| Comedy | tt45643419 | Ooio Aifujairea: Lifedesign | 2025 | 1440 | 93.30 | 28.74 | 46.86 | longer |
-| Action | tt0165127 | Burning of the Red Lotus Temple | 1928 | 1620 | 101.22 | 33.75 | 45.00 | longer |
-| Sci-Fi | tt6127010 | Funusion | 2016 | 1440 | 91.24 | 30.47 | 44.27 | longer |
-| Adventure | tt45643419 | Ooio Aifujairea: Lifedesign | 2025 | 1440 | 93.01 | 30.58 | 44.05 | longer |
-| Sport | tt1885195 | Azgrab: The Documentary | 2011 | 1669 | 88.91 | 37.38 | 42.27 | longer |
-| Fantasy | tt6127010 | Funusion | 2016 | 1440 | 94.07 | 31.90 | 42.19 | longer |
-| Drama | tt0165127 | Burning of the Red Lotus Temple | 1928 | 1620 | 96.10 | 37.00 | 41.19 | longer |
-| Musical | tt22445582 | Sigur rós: Route One | 2016 | 1440 | 100.03 | 33.31 | 40.22 | longer |
-| Documentary | tt2355497 | Beijing 2003 | 2004 | 9000 | 78.05 | 223.52 | 39.92 | longer |
-| Action | tt45643419 | Ooio Aifujairea: Lifedesign | 2025 | 1440 | 101.22 | 33.75 | 39.67 | longer |
-| Drama | tt5942280 | The Nothing Movie | 2016 | 1559 | 96.10 | 37.00 | 39.54 | longer |
-| Action | tt0004052 | The Hazards of Helen | 1914 | 1428 | 101.22 | 33.75 | 39.31 | longer |
-| Drama | tt0179184 | **** | 1967 | 1500 | 96.10 | 37.00 | 37.94 | longer |
-| Drama | tt2008009 | The Clock | 2010 | 1440 | 96.10 | 37.00 | 36.32 | longer |
-| Comedy | tt8677246 | Bullfighting Memories | 2017 | 1100 | 93.30 | 28.74 | 35.03 | longer |
-| Crime | tt9900018 | His Last Stand |  | 990 | 95.70 | 25.59 | 34.94 | longer |
-| Mystery | tt1745901 | How Does David Lynch Do It? | 2010 | 1800 | 94.39 | 50.44 | 33.81 | longer |
-| Music | tt32350999 | Rock Milestones: Metallica - The Halcyon Years | 2007 | 2007 | 88.44 | 57.67 | 33.27 | longer |
-| Music | tt32350897 | Madonna: Live | 2005 | 2005 | 88.44 | 57.67 | 33.23 | longer |
-| Drama | tt35509411 | Our First Day | 2025 | 1311 | 96.10 | 37.00 | 32.84 | longer |
-| History | tt1823692 | Hollywood East | 2010 | 1800 | 94.30 | 52.86 | 32.27 | longer |
-| Drama | tt7156814 | The Innocence | 2019 | 1260 | 96.10 | 37.00 | 31.46 | longer |
-| Sport | tt3963450 | NHL: Washington Capitals 10 Greatest Games | 2010 | 1200 | 88.91 | 37.38 | 29.72 | longer |
-| Drama | tt7549254 | Sakhi |  | 1179 | 96.10 | 37.00 | 29.27 | longer |
-| Drama | tt4567170 | Breaking Yop | 2015 | 1151 | 96.10 | 37.00 | 28.51 | longer |
-| Comedy | tt19711676 | Kahrlton Heights North | 2022 | 900 | 93.30 | 28.74 | 28.07 | longer |
-| Animation | tt39246012 | Tom and Jerry: The Golden Era Anthology | 1958 | 817 | 82.69 | 26.78 | 27.42 | longer |
-| Documentary | tt5068890 | Hunger! | 2015 | 6000 | 78.05 | 223.52 | 26.49 | longer |
-| Horror | tt1433078 | Amy's Night Out | 2007 | 675 | 88.68 | 22.26 | 26.34 | longer |
-| Romance | tt30249764 | The Man of Her Dreams | 2023 | 750 | 99.17 | 25.05 | 25.98 | longer |
+| genre | tconst | primaryTitle | startYear | runtimeMinutes | genre_median_runtime | robust_z | direction |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Comedy | tt5136218 | London EC1 | 2015 | 5460 | 91.00 | 26.49 | longer |
+| Mystery | tt5136218 | London EC1 | 2015 | 5460 | 92.00 | 21.63 | longer |
+| Documentary | tt8273150 | Logistics | 2012 | 51420 | 74.00 | 21.05 | longer |
+| Documentary | tt3854496 | Ambiancé | 2020 | 43200 | 74.00 | 20.49 | longer |
+| Drama | tt5068890 | Hunger! | 2015 | 6000 | 93.00 | 20.34 | longer |
+| Drama | tt1806963 | Matrjoschka | 2006 | 5700 | 93.00 | 20.09 | longer |
+| Drama | tt5136218 | London EC1 | 2015 | 5460 | 93.00 | 19.88 | longer |
+| Horror | tt7521772 | 24 Hour Psycho | 1993 | 1440 | 88.00 | 19.36 | longer |
+| Documentary | tt12277054 | Carnets Filmés (Liste Complète) | 2019 | 28643 | 74.00 | 19.16 | longer |
+| Comedy | tt1885195 | Azgrab: The Documentary | 2011 | 1669 | 91.00 | 18.82 | longer |
+| Comedy | tt45643419 | Ooio Aifujairea: Lifedesign | 2025 | 1440 | 91.00 | 17.87 | longer |
+| Drama | tt3837350 | A 2nd generation film | 2013 | 3077 | 93.00 | 17.08 | longer |
+| Documentary | tt2659636 | Modern Times Forever | 2011 | 14400 | 74.00 | 16.95 | longer |
+| Drama | tt0342707 | The Longest Most Meaningless Movie in the World | 1970 | 2880 | 93.00 | 16.76 | longer |
+| Action | tt7321476 | h36: | 2017 | 2160 | 94.00 | 16.32 | longer |
+| Comedy | tt8677246 | Bullfighting Memories | 2017 | 1100 | 91.00 | 16.12 | longer |
+| Sci-Fi | tt6127010 | Funusion | 2016 | 1440 | 90.00 | 15.88 | longer |
+| Mystery | tt1745901 | How Does David Lynch Do It? | 2010 | 1800 | 92.00 | 15.75 | longer |
+| Family | tt1866307 | World Peace & Prayer Day | 2011 | 2400 | 90.00 | 15.48 | longer |
+| Documentary | tt2355497 | Beijing 2003 | 2004 | 9000 | 74.00 | 15.44 | longer |
+| Fantasy | tt0165127 | Burning of the Red Lotus Temple | 1928 | 1620 | 91.00 | 15.07 | longer |
+| Adventure | tt45643419 | Ooio Aifujairea: Lifedesign | 2025 | 1440 | 90.00 | 14.94 | longer |
+| Drama | tt0387271 | A Twist of Fate | 1970 | 1970 | 93.00 | 14.91 | longer |
+| Action | tt0165127 | Burning of the Red Lotus Temple | 1928 | 1620 | 94.00 | 14.82 | longer |
+| Comedy | tt19711676 | Kahrlton Heights North | 2022 | 900 | 91.00 | 14.82 | longer |
+| Music | tt0284020 | The Cure for Insomnia | 1987 | 5220 | 87.00 | 14.69 | longer |
+| Fantasy | tt6127010 | Funusion | 2016 | 1440 | 91.00 | 14.46 | longer |
+| Action | tt45643419 | Ooio Aifujairea: Lifedesign | 2025 | 1440 | 94.00 | 14.21 | longer |
+| Action | tt0004052 | The Hazards of Helen | 1914 | 1428 | 94.00 | 14.17 | longer |
+| Documentary | tt5068890 | Hunger! | 2015 | 6000 | 74.00 | 14.14 | longer |
+| Horror | tt1433078 | Amy's Night Out | 2007 | 675 | 88.00 | 14.11 | longer |
+| Drama | tt0165127 | Burning of the Red Lotus Temple | 1928 | 1620 | 93.00 | 13.95 | longer |
+| Drama | tt5942280 | The Nothing Movie | 2016 | 1559 | 93.00 | 13.76 | longer |
+| Documentary | tt0284020 | The Cure for Insomnia | 1987 | 5220 | 74.00 | 13.69 | longer |
+| Drama | tt0179184 | **** | 1967 | 1500 | 93.00 | 13.58 | longer |
+| Horror | tt7442346 | Fan | 2017 | 623 | 88.00 | 13.56 | longer |
+| Drama | tt2008009 | The Clock | 2010 | 1440 | 93.00 | 13.38 | longer |
+| Horror | tt40792136 | Growth | 2026 | 587 | 88.00 | 13.15 | longer |
+| Crime | tt9900018 | His Last Stand |  | 990 | 93.00 | 13.14 | longer |
+| Drama | tt35509411 | Our First Day | 2025 | 1311 | 93.00 | 12.92 | longer |
+| Comedy | tt33336291 | Phonetag | 2023 | 659 | 91.00 | 12.81 | longer |
+| Sport | tt1885195 | Azgrab: The Documentary | 2011 | 1669 | 90.00 | 12.78 | longer |
+| Drama | tt7156814 | The Innocence | 2019 | 1260 | 93.00 | 12.72 | longer |
+| Drama | tt7549254 | Sakhi |  | 1179 | 93.00 | 12.40 | longer |
+| Musical | tt22445582 | Sigur rós: Route One | 2016 | 1440 | 94.00 | 12.37 | longer |
+| Drama | tt4567170 | Breaking Yop | 2015 | 1151 | 93.00 | 12.28 | longer |
+| Documentary | tt5135246 | Saynatakuna: Masks | 2013 | 2905 | 74.00 | 11.80 | longer |
+| Documentary | tt0342707 | The Longest Most Meaningless Movie in the World | 1970 | 2880 | 74.00 | 11.78 | longer |
+| Drama | tt0821950 | A Mosca cieca | 1921 | 1035 | 93.00 | 11.76 | longer |
+| Sci-Fi | tt0131597 | Split | 2004 | 700 | 90.00 | 11.75 | longer |
 
-_3343 rows in total, first 50 shown._
+_12379 rows in total, first 50 shown._
 
 ### Q2: Top three genres per year (1980-2025)
 
@@ -348,62 +346,121 @@ _8 rows in total._
 
 ### Q4: Directors with a single movie rated 8.0 or more
 
-<!-- RESULTS: q4_one_hit_directors -->
+<!-- RESULTS: q4_one_hit_directors, q4_one_hit_directors_average -->
 
-| nconst | primaryName | hit_title | hit_year | hit_rating | movies_rated_6_or_less | avg_rating_of_low_movies | rated_movies |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| nm0861703 | Richard Thorpe | The Wizard of Oz | 1939 | 8.10 | 42 | 5.57 | 94 |
-| nm0851537 | Norman Taurog | The Wizard of Oz | 1939 | 8.10 | 25 | 5.60 | 70 |
-| nm0080315 | Mahesh Bhatt | Saaransh | 1984 | 8.10 | 23 | 5.08 | 36 |
-| nm0002031 | Michael Curtiz | Casablanca | 1942 | 8.50 | 23 | 5.62 | 103 |
-| nm0490487 | Wai Keung Lau | Infernal Affairs | 2002 | 8.00 | 22 | 4.97 | 44 |
-| nm0700872 | Puri Jagannadh | Pokiri | 2006 | 8.00 | 21 | 4.73 | 34 |
-| nm0909825 | Raoul Walsh | White Heat | 1949 | 8.10 | 20 | 5.51 | 81 |
-| nm0030762 | Franz Antel | The Stubborn Mule | 1981 | 8.10 | 15 | 4.65 | 20 |
-| nm3359146 | Rabi Kinagi | Suna Panjuri | 1995 | 9.00 | 15 | 5.39 | 24 |
-| nm0435050 | Shaji Kailas | Aaram Thamburan | 1997 | 8.10 | 15 | 4.34 | 25 |
-| nm0000814 | John G. Avildsen | Rocky | 1976 | 8.10 | 14 | 5.20 | 22 |
-| nm0836328 | John Sturges | The Great Escape | 1963 | 8.20 | 14 | 5.71 | 42 |
-| nm0002030 | George Cukor | The Wizard of Oz | 1939 | 8.10 | 13 | 5.61 | 60 |
-| nm0132709 | Martin Campbell | Casino Royale | 2006 | 8.00 | 13 | 5.10 | 21 |
-| nm0920074 | William A. Wellman | The Ox-Bow Incident | 1943 | 8.00 | 13 | 5.55 | 68 |
-| nm1777967 | A.L. Vijay | Deiva Thirumagal | 2011 | 8.30 | 12 | 5.38 | 21 |
-| nm0000361 | Brian De Palma | Scarface | 1983 | 8.30 | 12 | 5.26 | 30 |
-| nm0503777 | Mervyn LeRoy | I Am a Fugitive from a Chain Gang | 1932 | 8.20 | 12 | 5.68 | 68 |
-| nm1212770 | Wenn V. Deramas | Bekikang: Ang nanay kong beki | 2013 | 8.50 | 12 | 5.35 | 21 |
-| nm0001675 | Robert Rodriguez | Sin City | 2005 | 8.00 | 11 | 4.79 | 24 |
-| nm0814469 | Sion Sono | Love Exposure | 2008 | 8.00 | 11 | 5.22 | 36 |
-| nm2321771 | Smeep Kang | Carry on Jatta | 2012 | 8.30 | 11 | 4.97 | 23 |
-| nm0677951 | Daniel Petrie | A Raisin in the Sun | 1961 | 8.00 | 10 | 5.38 | 19 |
-| nm0062614 | Harry Baweja | Chaar Sahibzaade 2: Rise of Banda Singh Bahadur | 2016 | 8.60 | 10 | 4.62 | 12 |
-| nm0430782 | Joshiy | Dhruvam | 1993 | 8.10 | 10 | 4.25 | 35 |
-| nm0695937 | Otto Preminger | Anatomy of a Murder | 1959 | 8.00 | 10 | 5.61 | 40 |
-| nm1583171 | R. Kannan | Jayam Kondaan | 2008 | 8.00 | 10 | 5.00 | 12 |
-| nm11412226 | Sigrid Polon | Boys in Service | 2025 | 8.00 | 10 | 4.62 | 12 |
-| nm0471452 | Suresh Krishna | Baasha | 1995 | 8.30 | 10 | 4.49 | 25 |
-| nm0948159 | Wilson Yip | Ip Man | 2008 | 8.00 | 10 | 5.34 | 22 |
-| nm0517768 | Dimitri Logothetis | Champions Forever | 1989 | 8.00 | 9 | 4.09 | 11 |
-| nm2538739 | Hanung Bramantyo | Love Is Never on Time | 2024 | 8.10 | 9 | 5.29 | 33 |
-| nm0155280 | Kaige Chen | Farewell My Concubine | 1993 | 8.10 | 9 | 5.69 | 23 |
-| nm0002045 | Stanley Donen | Singin' in the Rain | 1952 | 8.30 | 9 | 5.58 | 28 |
-| nm0001469 | Barry Levinson | Rain Man | 1988 | 8.00 | 8 | 5.44 | 26 |
-| nm0567680 | Bruce McDonald | Music from the Big House | 2010 | 8.40 | 8 | 5.40 | 16 |
-| nm1318819 | Ezhil | Thulladha Manamum Thullum | 1999 | 8.30 | 8 | 4.38 | 11 |
-| nm0002120 | Lasse Hallström | Hachi: A Dog's Tale | 2009 | 8.10 | 8 | 5.66 | 28 |
-| nm0796117 | M. Night Shyamalan | The Sixth Sense | 1999 | 8.20 | 8 | 5.13 | 16 |
-| nm1500124 | M. Padmakumar | Joseph | 2018 | 8.00 | 8 | 4.45 | 17 |
-| nm1688464 | Pedro Antonio | New Year's Special | 2023 | 8.40 | 8 | 5.44 | 11 |
-| nm0149134 | Sinan Çetin | Abbas in Flower | 1982 | 8.00 | 8 | 4.45 | 11 |
-| nm0000490 | Spike Lee | David Byrne's American Utopia | 2020 | 8.20 | 8 | 5.43 | 35 |
-| nm0096539 | António Borges Correia | Antes de a Vida Começar | 2006 | 9.30 | 7 | 5.31 | 8 |
-| nm0481838 | Edvin Laine | The Unknown Soldier | 1955 | 8.00 | 7 | 5.37 | 15 |
-| nm0576554 | Hansal Mehta | Shahid | 2012 | 8.20 | 7 | 4.93 | 12 |
-| nm0580669 | James Merendino | The Invisible Life of Thomas Lynch | 2009 | 9.10 | 7 | 4.59 | 11 |
-| nm0001379 | John Huston | The Treasure of the Sierra Madre | 1948 | 8.20 | 7 | 5.41 | 44 |
-| nm1434372 | Johny Antony | C.I.D. Moosa | 2003 | 8.10 | 7 | 4.71 | 10 |
-| nm0846092 | Kamal Tabrizi | The Lizard | 2004 | 8.40 | 7 | 4.76 | 15 |
+**q4_one_hit_directors**
+
+| nconst | primaryName | hit_title | hit_year | hit_rating | movies_rated_6_or_less | avg_rating_of_low_movies | other_movies | avg_rating_of_other_movies | rated_movies |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| nm0861703 | Richard Thorpe | The Wizard of Oz | 1939 | 8.10 | 42 | 5.57 | 93 | 6.09 | 94 |
+| nm0851537 | Norman Taurog | The Wizard of Oz | 1939 | 8.10 | 25 | 5.60 | 69 | 6.16 | 70 |
+| nm0080315 | Mahesh Bhatt | Saaransh | 1984 | 8.10 | 23 | 5.08 | 35 | 5.69 | 36 |
+| nm0002031 | Michael Curtiz | Casablanca | 1942 | 8.50 | 23 | 5.62 | 102 | 6.49 | 103 |
+| nm0490487 | Wai Keung Lau | Infernal Affairs | 2002 | 8.00 | 22 | 4.97 | 43 | 5.72 | 44 |
+| nm0700872 | Puri Jagannadh | Pokiri | 2006 | 8.00 | 21 | 4.73 | 33 | 5.52 | 34 |
+| nm0909825 | Raoul Walsh | White Heat | 1949 | 8.10 | 20 | 5.51 | 80 | 6.38 | 81 |
+| nm0030762 | Franz Antel | The Stubborn Mule | 1981 | 8.10 | 15 | 4.65 | 19 | 5.02 | 20 |
+| nm3359146 | Rabi Kinagi | Suna Panjuri | 1995 | 9.00 | 15 | 5.39 | 23 | 5.77 | 24 |
+| nm0435050 | Shaji Kailas | Aaram Thamburan | 1997 | 8.10 | 15 | 4.34 | 24 | 5.35 | 25 |
+| nm0000814 | John G. Avildsen | Rocky | 1976 | 8.10 | 14 | 5.20 | 21 | 5.78 | 22 |
+| nm0836328 | John Sturges | The Great Escape | 1963 | 8.20 | 14 | 5.71 | 41 | 6.39 | 42 |
+| nm0002030 | George Cukor | The Wizard of Oz | 1939 | 8.10 | 13 | 5.61 | 59 | 6.58 | 60 |
+| nm0132709 | Martin Campbell | Casino Royale | 2006 | 8.00 | 13 | 5.10 | 20 | 5.63 | 21 |
+| nm0920074 | William A. Wellman | The Ox-Bow Incident | 1943 | 8.00 | 13 | 5.55 | 67 | 6.46 | 68 |
+| nm1777967 | A.L. Vijay | Deiva Thirumagal | 2011 | 8.30 | 12 | 5.38 | 20 | 5.89 | 21 |
+| nm0000361 | Brian De Palma | Scarface | 1983 | 8.30 | 12 | 5.26 | 29 | 6.19 | 30 |
+| nm0503777 | Mervyn LeRoy | I Am a Fugitive from a Chain Gang | 1932 | 8.20 | 12 | 5.68 | 67 | 6.58 | 68 |
+| nm1212770 | Wenn V. Deramas | Bekikang: Ang nanay kong beki | 2013 | 8.50 | 12 | 5.35 | 20 | 5.98 | 21 |
+| nm0001675 | Robert Rodriguez | Sin City | 2005 | 8.00 | 11 | 4.79 | 23 | 5.90 | 24 |
+| nm0814469 | Sion Sono | Love Exposure | 2008 | 8.00 | 11 | 5.22 | 35 | 6.16 | 36 |
+| nm2321771 | Smeep Kang | Carry on Jatta | 2012 | 8.30 | 11 | 4.97 | 22 | 5.84 | 23 |
+| nm0677951 | Daniel Petrie | A Raisin in the Sun | 1961 | 8.00 | 10 | 5.38 | 18 | 5.91 | 19 |
+| nm0062614 | Harry Baweja | Chaar Sahibzaade 2: Rise of Banda Singh Bahadur | 2016 | 8.60 | 10 | 4.62 | 11 | 4.91 | 12 |
+| nm0430782 | Joshiy | Dhruvam | 1993 | 8.10 | 10 | 4.25 | 34 | 6.19 | 35 |
+| nm0695937 | Otto Preminger | Anatomy of a Murder | 1959 | 8.00 | 10 | 5.61 | 39 | 6.48 | 40 |
+| nm1583171 | R. Kannan | Jayam Kondaan | 2008 | 8.00 | 10 | 5.00 | 11 | 5.12 | 12 |
+| nm11412226 | Sigrid Polon | Boys in Service | 2025 | 8.00 | 10 | 4.62 | 11 | 4.85 | 12 |
+| nm0471452 | Suresh Krishna | Baasha | 1995 | 8.30 | 10 | 4.49 | 24 | 5.98 | 25 |
+| nm0948159 | Wilson Yip | Ip Man | 2008 | 8.00 | 10 | 5.34 | 21 | 6.08 | 22 |
+| nm0517768 | Dimitri Logothetis | Champions Forever | 1989 | 8.00 | 9 | 4.09 | 10 | 4.34 | 11 |
+| nm2538739 | Hanung Bramantyo | Love Is Never on Time | 2024 | 8.10 | 9 | 5.29 | 32 | 6.48 | 33 |
+| nm0155280 | Kaige Chen | Farewell My Concubine | 1993 | 8.10 | 9 | 5.69 | 22 | 6.33 | 23 |
+| nm0002045 | Stanley Donen | Singin' in the Rain | 1952 | 8.30 | 9 | 5.58 | 27 | 6.39 | 28 |
+| nm0001469 | Barry Levinson | Rain Man | 1988 | 8.00 | 8 | 5.44 | 25 | 6.33 | 26 |
+| nm0567680 | Bruce McDonald | Music from the Big House | 2010 | 8.40 | 8 | 5.40 | 15 | 6.03 | 16 |
+| nm1318819 | Ezhil | Thulladha Manamum Thullum | 1999 | 8.30 | 8 | 4.38 | 10 | 4.77 | 11 |
+| nm0002120 | Lasse Hallström | Hachi: A Dog's Tale | 2009 | 8.10 | 8 | 5.66 | 27 | 6.51 | 28 |
+| nm0796117 | M. Night Shyamalan | The Sixth Sense | 1999 | 8.20 | 8 | 5.13 | 15 | 5.87 | 16 |
+| nm1500124 | M. Padmakumar | Joseph | 2018 | 8.00 | 8 | 4.45 | 16 | 5.59 | 17 |
+| nm1688464 | Pedro Antonio | New Year's Special | 2023 | 8.40 | 8 | 5.44 | 10 | 5.61 | 11 |
+| nm0149134 | Sinan Çetin | Abbas in Flower | 1982 | 8.00 | 8 | 4.45 | 10 | 4.89 | 11 |
+| nm0000490 | Spike Lee | David Byrne's American Utopia | 2020 | 8.20 | 8 | 5.43 | 34 | 6.65 | 35 |
+| nm0096539 | António Borges Correia | Antes de a Vida Começar | 2006 | 9.30 | 7 | 5.31 | 7 | 5.31 | 8 |
+| nm0481838 | Edvin Laine | The Unknown Soldier | 1955 | 8.00 | 7 | 5.37 | 14 | 5.95 | 15 |
+| nm0576554 | Hansal Mehta | Shahid | 2012 | 8.20 | 7 | 4.93 | 11 | 5.75 | 12 |
+| nm0580669 | James Merendino | The Invisible Life of Thomas Lynch | 2009 | 9.10 | 7 | 4.59 | 10 | 5.30 | 11 |
+| nm0001379 | John Huston | The Treasure of the Sierra Madre | 1948 | 8.20 | 7 | 5.41 | 43 | 6.68 | 44 |
+| nm1434372 | Johny Antony | C.I.D. Moosa | 2003 | 8.10 | 7 | 4.71 | 9 | 5.09 | 10 |
+| nm0846092 | Kamal Tabrizi | The Lizard | 2004 | 8.40 | 7 | 4.76 | 14 | 5.76 | 15 |
 
 _348 rows in total, first 50 shown._
+
+**q4_one_hit_directors_average**
+
+| nconst | primaryName | hit_title | hit_year | hit_rating | movies_rated_6_or_less | avg_rating_of_low_movies | other_movies | avg_rating_of_other_movies | rated_movies |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| nm0490487 | Wai Keung Lau | Infernal Affairs | 2002 | 8.00 | 22 | 4.97 | 43 | 5.72 | 44 |
+| nm0080315 | Mahesh Bhatt | Saaransh | 1984 | 8.10 | 23 | 5.08 | 35 | 5.69 | 36 |
+| nm0700872 | Puri Jagannadh | Pokiri | 2006 | 8.00 | 21 | 4.73 | 33 | 5.52 | 34 |
+| nm0435050 | Shaji Kailas | Aaram Thamburan | 1997 | 8.10 | 15 | 4.34 | 24 | 5.35 | 25 |
+| nm0471452 | Suresh Krishna | Baasha | 1995 | 8.30 | 10 | 4.49 | 24 | 5.98 | 25 |
+| nm3359146 | Rabi Kinagi | Suna Panjuri | 1995 | 9.00 | 15 | 5.39 | 23 | 5.77 | 24 |
+| nm0001675 | Robert Rodriguez | Sin City | 2005 | 8.00 | 11 | 4.79 | 23 | 5.90 | 24 |
+| nm2321771 | Smeep Kang | Carry on Jatta | 2012 | 8.30 | 11 | 4.97 | 22 | 5.84 | 23 |
+| nm0000814 | John G. Avildsen | Rocky | 1976 | 8.10 | 14 | 5.20 | 21 | 5.78 | 22 |
+| nm1777967 | A.L. Vijay | Deiva Thirumagal | 2011 | 8.30 | 12 | 5.38 | 20 | 5.89 | 21 |
+| nm0132709 | Martin Campbell | Casino Royale | 2006 | 8.00 | 13 | 5.10 | 20 | 5.63 | 21 |
+| nm1212770 | Wenn V. Deramas | Bekikang: Ang nanay kong beki | 2013 | 8.50 | 12 | 5.35 | 20 | 5.98 | 21 |
+| nm0030762 | Franz Antel | The Stubborn Mule | 1981 | 8.10 | 15 | 4.65 | 19 | 5.02 | 20 |
+| nm0677951 | Daniel Petrie | A Raisin in the Sun | 1961 | 8.00 | 10 | 5.38 | 18 | 5.91 | 19 |
+| nm1500124 | M. Padmakumar | Joseph | 2018 | 8.00 | 8 | 4.45 | 16 | 5.59 | 17 |
+| nm0000436 | Curtis Hanson | L.A. Confidential | 1997 | 8.20 | 6 | 4.78 | 15 | 6.00 | 16 |
+| nm0796117 | M. Night Shyamalan | The Sixth Sense | 1999 | 8.20 | 8 | 5.13 | 15 | 5.87 | 16 |
+| nm0481838 | Edvin Laine | The Unknown Soldier | 1955 | 8.00 | 7 | 5.37 | 14 | 5.95 | 15 |
+| nm0846092 | Kamal Tabrizi | The Lizard | 2004 | 8.40 | 7 | 4.76 | 14 | 5.76 | 15 |
+| nm1025280 | Anubhav Sinha | Article 15 | 2019 | 8.10 | 6 | 4.67 | 12 | 5.77 | 13 |
+| nm0536705 | Ananth Mahadevan | Phule | 2025 | 8.10 | 6 | 4.40 | 11 | 5.60 | 12 |
+| nm0954099 | Dejan Zecevic | Decak iz Junkovca | 1996 | 8.50 | 4 | 4.30 | 11 | 5.87 | 12 |
+| nm0576554 | Hansal Mehta | Shahid | 2012 | 8.20 | 7 | 4.93 | 11 | 5.75 | 12 |
+| nm0062614 | Harry Baweja | Chaar Sahibzaade 2: Rise of Banda Singh Bahadur | 2016 | 8.60 | 10 | 4.62 | 11 | 4.91 | 12 |
+| nm1583171 | R. Kannan | Jayam Kondaan | 2008 | 8.00 | 10 | 5.00 | 11 | 5.12 | 12 |
+| nm11412226 | Sigrid Polon | Boys in Service | 2025 | 8.00 | 10 | 4.62 | 11 | 4.85 | 12 |
+| nm0059633 | Tunç Başaran | Don't Let Them Shoot the Kite | 1989 | 8.10 | 4 | 4.18 | 11 | 5.89 | 12 |
+| nm0517768 | Dimitri Logothetis | Champions Forever | 1989 | 8.00 | 9 | 4.09 | 10 | 4.34 | 11 |
+| nm1318819 | Ezhil | Thulladha Manamum Thullum | 1999 | 8.30 | 8 | 4.38 | 10 | 4.77 | 11 |
+| nm0064961 | Gorman Bechard | A Dog Named Gucci | 2015 | 8.40 | 6 | 4.52 | 10 | 5.44 | 11 |
+| nm0348015 | Gunasekhar | Okkadu | 2003 | 8.00 | 6 | 4.55 | 10 | 5.57 | 11 |
+| nm0580669 | James Merendino | The Invisible Life of Thomas Lynch | 2009 | 9.10 | 7 | 4.59 | 10 | 5.30 | 11 |
+| nm1688464 | Pedro Antonio | New Year's Special | 2023 | 8.40 | 8 | 5.44 | 10 | 5.61 | 11 |
+| nm0803350 | Sangeeth Sivan | Yoddha | 1992 | 8.40 | 7 | 4.49 | 10 | 5.11 | 11 |
+| nm0149134 | Sinan Çetin | Abbas in Flower | 1982 | 8.00 | 8 | 4.45 | 10 | 4.89 | 11 |
+| nm0244892 | J.P. Dutta | Border | 1997 | 8.00 | 5 | 5.46 | 9 | 5.94 | 10 |
+| nm1434372 | Johny Antony | C.I.D. Moosa | 2003 | 8.10 | 7 | 4.71 | 9 | 5.09 | 10 |
+| nm0347728 | Melih Gülgen | Tatar Ramazan: Sürgünde | 1992 | 8.00 | 7 | 5.36 | 9 | 5.72 | 10 |
+| nm1459905 | Raffi | Punjabi House | 1998 | 8.10 | 5 | 5.20 | 9 | 6.00 | 10 |
+| nm4479905 | Billy Christian | The Sacred Riana 2: Bloody Mary | 2022 | 8.40 | 6 | 5.30 | 8 | 5.73 | 9 |
+| nm0007144 | Santosh Sivan | Halo | 1996 | 8.30 | 2 | 3.15 | 8 | 5.96 | 9 |
+| nm0096539 | António Borges Correia | Antes de a Vida Começar | 2006 | 9.30 | 7 | 5.31 | 7 | 5.31 | 8 |
+| nm0787453 | Kundan Shah | Jaane Bhi Do Yaaro | 1983 | 8.30 | 5 | 4.56 | 7 | 5.21 | 8 |
+| nm1098726 | Milorad Milinkovic | Frozen Stiff | 2002 | 8.30 | 4 | 5.18 | 7 | 5.63 | 8 |
+| nm0002916 | Ray Brady | Egression | 2011 | 8.80 | 5 | 4.96 | 7 | 5.47 | 8 |
+| nm1164861 | Seth Gordon | The King of Kong: A Fistful of Quarters | 2007 | 8.00 | 5 | 5.34 | 7 | 5.70 | 8 |
+| nm4062141 | A. Venkatesh | Dhil Raja | 2024 | 8.40 | 4 | 4.90 | 6 | 5.70 | 7 |
+| nm4299374 | Alex R. Wagner | Barbenheimer and the Cult of Walt Disney | 2024 | 9.10 | 2 | 3.95 | 6 | 5.93 | 7 |
+| nm1896291 | Ashok Pati | Pabar | 2024 | 8.00 | 5 | 5.12 | 6 | 5.28 | 7 |
+| nm2347386 | Bommarillu Baskar | Bommarillu | 2006 | 8.20 | 3 | 5.17 | 6 | 5.92 | 7 |
+
+_167 rows in total, first 50 shown._
 
 ### Q5: Series whose worst episode is in the last season
 
@@ -411,58 +468,58 @@ _348 rows in total, first 50 shown._
 
 | series_tconst | series_title | series_start | seasons | big_seasons | last_season | best_episode | best_season | best_rating | worst_episode | worst_season | worst_rating |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| tt8736020 | #LikeMe | 2019 | 7 | 6 | 2 | tt8894690 | 1 | 8.90 | tt11452850 | 2 | 6.90 |
 | tt0759475 | 'Til Death | 2006 | 4 | 3 | 4 | tt0945610 | 1 | 8.20 | tt1617665 | 4 | 5.60 |
+| tt1809413 | 1 Kadin 1 Erkek | 2008 | 8 | 8 | 1 | tt10197432 | 1 | 8.00 | tt10197436 | 1 | 7.90 |
+| tt13444828 | 12 Words | 2020 | 3 | 3 | 1 | tt13490208 | 1 | 9.40 | tt13492154 | 1 | 8.60 |
 | tt1837492 | 13 Reasons Why | 2017 | 4 | 4 | 4 | tt5174280 | 1 | 9.20 | tt11187066 | 4 | 5.10 |
+| tt1307083 | 17 Kids and Counting | 2008 | 15 | 14 | 7 | tt1319202 | 1 | 4.60 | tt1967432 | 7 | 2.70 |
+| tt0086660 | 1st & Ten | 1984 | 6 | 6 | 1 | tt0501360 | 1 | 5.70 | tt0501360 | 1 | 5.70 |
 | tt0285331 | 24 | 2001 | 8 | 8 | 8 | tt0502164 | 1 | 9.30 | tt1463806 | 8 | 7.60 |
 | tt1408430 | 30 for 30 | 2009 | 5 | 4 | 5 | tt2751904 | 2 | 8.50 | tt32368140 | 5 | 5.20 |
 | tt0376364 | 31 Minutes | 2002 | 4 | 4 | 4 | tt5784196 | 2 | 9.60 | tt4790040 | 4 | 6.50 |
+| tt0992966 | 7 Numara | 2000 | 3 | 3 | 1 | tt10948598 | 1 | 9.60 | tt8717460 | 1 | 9.00 |
+| tt0192877 | 7 vidas | 1999 | 11 | 10 | 1 | tt0853290 | 1 | 6.70 | tt0853290 | 1 | 6.70 |
+| tt16994878 | 7 vs. Wild | 2021 | 6 | 6 | 5 | tt25393396 | 2 | 8.80 | tt38772077 | 5 | 3.40 |
+| tt3279494 | @midnight | 2013 | 4 | 4 | 1 | tt3292050 | 1 | 8.00 | tt3286812 | 1 | 7.50 |
+| tt0090399 | A Better Life | 1987 | 3 | 3 | 1 | tt0935210 | 1 | 8.40 | tt0935203 | 1 | 8.30 |
+| tt8611552 | A Day Before Us | 2018 | 3 | 3 | 1 | tt11467596 | 1 | 8.70 | tt11467596 | 1 | 8.70 |
 | tt15007664 | A Professor | 2021 | 3 | 3 | 3 | tt15988290 | 1 | 8.70 | tt36042527 | 3 | 6.90 |
 | tt0415313 | A White Ship | 2006 | 6 | 6 | 6 | tt1052440 | 1 | 8.80 | tt2207883 | 6 | 5.60 |
+| tt13695606 | A Will Eternal | 2020 | 3 | 3 | 2 | tt13715526 | 1 | 9.70 | tt27407050 | 2 | 9.10 |
+| tt11092482 | AEW Dark | 2019 | 5 | 5 | 2 | tt11137756 | 1 | 7.70 | tt12026362 | 2 | 5.60 |
 | tt14738480 | AEW Rampage | 2021 | 4 | 4 | 4 | tt14961604 | 1 | 9.10 | tt30609344 | 4 | 5.60 |
+| tt5759648 | Aber Bergen: Partners in Law | 2016 | 3 | 3 | 1 | tt6131064 | 1 | 8.10 | tt6058002 | 1 | 7.40 |
 | tt13567344 | Acapulco | 2021 | 4 | 4 | 4 | tt19371324 | 2 | 8.90 | tt33296280 | 4 | 6.60 |
 | tt0115084 | Ace Ventura: Pet Detective | 1995 | 3 | 3 | 3 | tt1016412 | 1 | 9.00 | tt1016421 | 3 | 6.40 |
+| tt21057376 | Acting Good | 2022 | 5 | 4 | 1 | tt22486548 | 1 | 6.40 | tt22486548 | 1 | 6.40 |
+| tt0227868 | Adventures from the Book of Virtues | 1996 | 3 | 3 | 1 | tt0505622 | 1 | 7.80 | tt0505622 | 1 | 7.80 |
+| tt0052440 | Adventures in Paradise | 1959 | 3 | 3 | 1 | tt0505647 | 1 | 8.80 | tt0505672 | 1 | 6.60 |
+| tt8593810 | Aikuiset | 2019 | 3 | 3 | 1 | tt9898212 | 1 | 7.20 | tt9897724 | 1 | 7.10 |
+| tt1600931 | Akkara Kazhchakal | 2008 | 4 | 3 | 1 | tt1638006 | 1 | 9.10 | tt1638006 | 1 | 9.10 |
+| tt1441404 | Al fondo hay sitio | 2009 | 13 | 13 | 1 | tt9645504 | 1 | 8.10 | tt9645504 | 1 | 8.10 |
+| tt1531068 | Alaska State Troopers | 2009 | 10 | 7 | 1 | tt1536564 | 1 | 6.20 | tt1536564 | 1 | 6.20 |
+| tt5520772 | Alex & Co. | 2015 | 3 | 3 | 1 | tt5625700 | 1 | 7.70 | tt5625700 | 1 | 7.70 |
 | tt0088476 | Alfred Hitchcock Presents | 1985 | 4 | 4 | 4 | tt0508387 | 1 | 8.00 | tt0508407 | 4 | 5.10 |
 | tt0285333 | Alias | 2001 | 5 | 5 | 5 | tt0508628 | 2 | 9.00 | tt0508622 | 5 | 7.10 |
 | tt7414406 | All American | 2018 | 8 | 8 | 8 | tt10234774 | 2 | 9.00 | tt37156731 | 8 | 6.10 |
 | tt14088994 | All American: Homecoming | 2022 | 3 | 3 | 3 | tt18569776 | 1 | 8.60 | tt32367820 | 3 | 6.20 |
+| tt0118252 | All Dogs Go to Heaven: The Series | 1996 | 3 | 3 | 1 | tt0765857 | 1 | 7.80 | tt0765857 | 1 | 7.80 |
+| tt14915596 | All Heart | 2021 | 3 | 3 | 1 | tt14925638 | 1 | 7.30 | tt14925638 | 1 | 7.30 |
+| tt11737106 | All Inclusive | 2020 | 5 | 5 | 1 | tt11742492 | 1 | 9.00 | tt11742506 | 1 | 8.00 |
 | tt10329042 | All Rise | 2019 | 3 | 3 | 3 | tt12194450 | 1 | 8.40 | tt15558894 | 3 | 4.70 |
+| tt0215510 | All stars: De serie | 1999 | 3 | 3 | 2 | tt0510028 | 1 | 7.90 | tt0510034 | 2 | 6.70 |
+| tt2469954 | Amazing Detective Di Renjie | 2004 | 5 | 5 | 3 | tt2579504 | 2 | 7.80 | tt2579506 | 3 | 7.10 |
+| tt0098740 | America's Funniest Home Videos | 1989 | 37 | 35 | 1 | tt1294277 | 1 | 6.30 | tt1379753 | 1 | 6.20 |
 | tt0319930 | American Dreams | 2002 | 3 | 3 | 3 | tt0511674 | 2 | 9.70 | tt0511676 | 3 | 3.50 |
+| tt0096532 | American Gladiators | 1989 | 8 | 7 | 1 | tt1000787 | 1 | 7.30 | tt1000788 | 1 | 7.20 |
 | tt1756927 | American Restoration | 2010 | 7 | 5 | 7 | tt1883454 | 2 | 8.20 | tt5284500 | 7 | 2.80 |
+| tt12872884 | An Anatolian Tale | 2020 | 7 | 6 | 1 | tt13639714 | 1 | 9.00 | tt13450724 | 1 | 8.50 |
+| tt7569724 | Ancient Civilizations | 2017 | 6 | 4 | 1 | tt9032160 | 1 | 7.40 | tt9032160 | 1 | 7.40 |
 | tt13819960 | And Just Like That... | 2021 | 3 | 3 | 3 | tt27304686 | 2 | 7.60 | tt36587111 | 3 | 4.80 |
-| tt3012598 | Angry Birds Toons | 2013 | 3 | 3 | 3 | tt3365572 | 1 | 8.20 | tt5656320 | 3 | 6.10 |
-| tt6951546 | Animaniacs | 2020 | 3 | 3 | 3 | tt13523530 | 2 | 8.20 | tt15223962 | 3 | 7.10 |
-| tt0475900 | Anthony Bourdain: No Reservations | 2005 | 9 | 8 | 9 | tt0944985 | 2 | 8.90 | tt2388822 | 9 | 6.20 |
-| tt0078562 | Archie Bunker's Place | 1979 | 4 | 4 | 4 | tt0514282 | 2 | 9.30 | tt0834639 | 4 | 6.40 |
-| tt10431290 | Arifureta: From Commonplace to World's Strongest | 2019 | 3 | 3 | 3 | tt18922382 | 2 | 8.10 | tt34871900 | 3 | 6.70 |
-| tt13675832 | As If | 2021 | 6 | 6 | 6 | tt17372870 | 2 | 9.40 | tt36364103 | 6 | 6.20 |
-| tt8439812 | Asouf | 2018 | 3 | 3 | 3 | tt12102038 | 2 | 7.80 | tt20244604 | 3 | 3.80 |
-| tt7552590 | At Home with Amy Sedaris | 2017 | 3 | 3 | 3 | tt9816646 | 2 | 8.90 | tt11736350 | 3 | 7.50 |
-| tt6315640 | Atypical | 2017 | 4 | 3 | 4 | tt8151006 | 2 | 9.10 | tt11860890 | 4 | 7.40 |
-| tt2455546 | Avengers Assemble | 2013 | 5 | 5 | 5 | tt4399538 | 2 | 8.30 | tt9129100 | 5 | 5.90 |
-| tt0990935 | BBC Sunday-Night Play | 1960 | 4 | 4 | 4 | tt1387601 | 1 | 9.70 | tt0396714 | 4 | 6.60 |
-| tt2891574 | Ballers | 2015 | 5 | 3 | 5 | tt5915090 | 2 | 8.50 | tt8956930 | 5 | 7.10 |
-| tt0059968 | Batman | 1966 | 3 | 3 | 3 | tt0519500 | 2 | 8.40 | tt0519491 | 3 | 5.70 |
-| tt1213218 | Batman: The Brave and the Bold | 2008 | 3 | 3 | 3 | tt1481441 | 2 | 9.00 | tt1997672 | 3 | 6.30 |
-| tt11043632 | Beastars | 2019 | 3 | 3 | 3 | tt13992786 | 2 | 8.90 | tt40489109 | 3 | 7.00 |
-| tt4716268 | Beat Bugs | 2016 | 3 | 3 | 3 | tt5841286 | 1 | 8.60 | tt7665180 | 3 | 6.80 |
-| tt0092319 | Beauty and the Beast | 1987 | 3 | 3 | 3 | tt0520490 | 1 | 9.00 | tt0520531 | 3 | 6.50 |
-| tt3638488 | Bedrag | 2016 | 3 | 3 | 3 | tt5343492 | 1 | 8.10 | tt7636446 | 3 | 7.40 |
-| tt14721554 | Below Deck Down Under | 2022 | 4 | 4 | 4 | tt28494246 | 2 | 8.50 | tt39188644 | 4 | 5.70 |
-| tt1192169 | Ben 10: Alien Force | 2008 | 3 | 3 | 3 | tt1394410 | 2 | 9.20 | tt1518343 | 3 | 6.20 |
-| tt1622696 | Ben 10: Ultimate Alien | 2010 | 3 | 3 | 3 | tt1740876 | 1 | 9.30 | tt2033545 | 3 | 5.10 |
-| tt0078569 | Benson | 1979 | 7 | 7 | 7 | tt0521549 | 2 | 9.00 | tt0521559 | 7 | 6.00 |
-| tt1674928 | Beyblade: Metal Fusion | 2009 | 3 | 3 | 3 | tt2276138 | 2 | 9.80 | tt2789080 | 3 | 7.70 |
-| tt5515212 | Big Hero 6: The Series | 2017 | 3 | 3 | 3 | tt11497990 | 2 | 8.80 | tt13950588 | 3 | 6.20 |
-| tt0066633 | Bless This House | 1971 | 6 | 5 | 6 | tt0526893 | 1 | 7.10 | tt0526914 | 6 | 5.30 |
-| tt3520702 | Bloodline | 2015 | 3 | 3 | 3 | tt4141318 | 1 | 9.10 | tt6037530 | 3 | 3.60 |
-| tt0122813 | Bob and Margaret | 1993 | 4 | 4 | 4 | tt1121206 | 1 | 8.60 | tt0824810 | 4 | 2.70 |
-| tt0286347 | Braceface | 2001 | 3 | 3 | 3 | tt1224627 | 1 | 8.30 | tt4737656 | 3 | 5.10 |
-| tt2078690 | Brain Games | 2011 | 8 | 4 | 8 | tt2260125 | 1 | 8.10 | tt11655668 | 8 | 5.20 |
-| tt6462806 | Bride of Istanbul | 2017 | 3 | 3 | 3 | tt7636772 | 1 | 8.50 | tt8994552 | 3 | 4.70 |
-| tt4075038 | Broken Pieces | 2014 | 3 | 3 | 3 | tt5635202 | 2 | 9.20 | tt6706006 | 3 | 6.20 |
-| tt5827228 | Bull | 2016 | 6 | 6 | 6 | tt7551832 | 2 | 8.60 | tt19064878 | 6 | 5.90 |
+| tt6155146 | Ang probinsyano | 2015 | 9 | 9 | 1 | tt6476178 | 1 | 6.70 | tt6476162 | 1 | 5.20 |
 
-_312 rows in total, first 50 shown._
+_1025 rows in total, first 50 shown._
 
 ### Q6: Actors successful in several languages
 
@@ -586,58 +643,58 @@ _367 rows in total, first 50 shown._
 
 <!-- RESULTS: q7_early_peak_actors -->
 
-| nconst | primaryName | first_year | last_year | career_years | movies | best_movie | best_year | best_rating | early_avg_rating | late_avg_rating | rating_drop |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| nm0000043 | Veronica Lake | 1941 | 1970 | 29 | 20 | Sullivan's Travels | 1941 | 7.90 | 6.42 | 2.50 | 3.92 |
-| nm0025618 | Mahesh Anand | 1988 | 2019 | 31 | 32 | Abhimanyu | 1991 | 7.40 | 5.47 | 1.90 | 3.57 |
-| nm0680927 | Philomina | 1983 | 2003 | 20 | 16 | Godfather | 1991 | 8.60 | 7.33 | 3.80 | 3.53 |
-| nm0939961 | Robert Woods | 1966 | 2016 | 50 | 22 | My Name Is Pecos | 1966 | 6.10 | 5.12 | 1.70 | 3.42 |
-| nm0738553 | Artur Rolén | 1918 | 1967 | 49 | 20 | The Outlaw and His Wife | 1918 | 7.20 | 7.20 | 3.85 | 3.35 |
-| nm0060692 | Aleksey Batalov | 1954 | 2007 | 53 | 16 | The Cranes Are Flying | 1957 | 8.30 | 7.35 | 4.05 | 3.30 |
-| nm0562770 | Ken Maynard | 1931 | 1970 | 39 | 19 | Harmony Trail | 1944 | 6.70 | 5.97 | 2.70 | 3.27 |
-| nm0936295 | Norman Wisdom | 1953 | 2002 | 49 | 18 | A Stitch in Time | 1963 | 6.90 | 6.31 | 3.20 | 3.11 |
-| nm0767741 | Tom Savini | 1977 | 2015 | 38 | 20 | From Dusk Till Dawn | 1996 | 7.20 | 6.13 | 3.16 | 2.97 |
-| nm0007147 | Dev Anand | 1951 | 2003 | 52 | 41 | Guide | 1965 | 8.40 | 7.11 | 4.16 | 2.95 |
-| nm0044600 | Saroja Devi B. | 1958 | 2023 | 65 | 16 | Babruvahana | 1977 | 8.90 | 8.01 | 5.07 | 2.94 |
-| nm0015629 | Tuncay Akça | 1975 | 2018 | 43 | 19 | The Chaos Class Failed the Class | 1975 | 8.30 | 6.74 | 3.90 | 2.84 |
-| nm0619870 | Reza Naji | 1997 | 2025 | 28 | 18 | Children of Heaven | 1997 | 8.20 | 7.30 | 4.52 | 2.78 |
-| nm0008206 | Akbar Abdi | 1987 | 2023 | 36 | 40 | Mother | 1990 | 8.40 | 6.46 | 3.69 | 2.77 |
-| nm0351352 | Coşkun Göğen | 1975 | 2022 | 47 | 23 | Arkadasim | 1982 | 7.20 | 5.46 | 2.70 | 2.76 |
-| nm0613098 | Caroline Munro | 1972 | 2020 | 48 | 19 | The Spy Who Loved Me | 1977 | 7.00 | 5.59 | 2.83 | 2.76 |
-| nm0499614 | Ari Lehman | 1978 | 2026 | 48 | 17 | Manny's Orphans | 1978 | 6.40 | 6.40 | 3.68 | 2.72 |
-| nm0878597 | Deborah Twiss | 1997 | 2025 | 28 | 16 | Kick-Ass | 2010 | 7.60 | 6.60 | 3.88 | 2.72 |
-| nm0164967 | Robert Clarke | 1945 | 1990 | 45 | 28 | The Enchanted Cottage | 1945 | 7.50 | 5.49 | 2.87 | 2.62 |
-| nm0006370 | Manoj Kumar | 1962 | 1995 | 33 | 20 | My Name Is Joker | 1970 | 7.90 | 7.02 | 4.43 | 2.59 |
-| nm0015145 | Halit Akçatepe | 1972 | 2005 | 33 | 35 | The Chaos Class | 1975 | 9.10 | 7.16 | 4.57 | 2.59 |
-| nm0431889 | Arline Judge | 1931 | 1963 | 32 | 26 | From This Day Forward | 1946 | 6.40 | 5.88 | 3.30 | 2.58 |
-| nm0838517 | Sumalatha | 1980 | 2023 | 43 | 25 | Thoovanathumbikal | 1987 | 8.60 | 7.23 | 4.67 | 2.56 |
-| nm0042820 | Suzan Avcı | 1962 | 2003 | 41 | 40 | Before the Ice Thaws | 1965 | 7.60 | 5.82 | 3.27 | 2.55 |
-| nm0518579 | Ulli Lommel | 1964 | 2020 | 56 | 25 | Chinese Roulette | 1976 | 7.20 | 5.64 | 3.10 | 2.54 |
-| nm0454448 | Andrea King | 1944 | 1994 | 50 | 24 | Ride the Pink Horse | 1947 | 7.20 | 6.49 | 3.95 | 2.54 |
-| nm9969854 | Rekha | 1986 | 2026 | 40 | 28 | In Harihar Nagar | 1990 | 8.60 | 7.34 | 4.89 | 2.45 |
-| nm0006428 | Arlene Dahl | 1947 | 1991 | 44 | 26 | Journey to the Center of the Earth | 1959 | 7.00 | 6.20 | 3.80 | 2.40 |
-| nm0093921 | Derek Bond | 1947 | 1998 | 51 | 23 | Scott of the Antarctic | 1948 | 7.00 | 6.08 | 3.70 | 2.38 |
-| nm0557625 | Raju Shrestha | 1972 | 2012 | 40 | 16 | Bawarchi | 1972 | 8.10 | 7.00 | 4.62 | 2.38 |
-| nm0450810 | Evelyn Keyes | 1939 | 1989 | 50 | 34 | Gone with the Wind | 1939 | 8.20 | 6.52 | 4.15 | 2.37 |
-| nm0900568 | Rena Vlahopoulou | 1962 | 1982 | 20 | 21 | The Robber Cries Thief! | 1965 | 7.50 | 6.14 | 3.77 | 2.37 |
-| nm0135988 | Lilli Carati | 1975 | 2015 | 40 | 17 | Highway Racer | 1977 | 6.40 | 5.07 | 2.70 | 2.37 |
-| nm0449431 | András Kern | 1973 | 2016 | 43 | 22 | Cat City | 1986 | 8.20 | 7.19 | 4.83 | 2.36 |
-| nm0129316 | Giuliana Calandra | 1973 | 2008 | 35 | 23 | Love & Anarchy | 1973 | 7.70 | 5.98 | 3.70 | 2.28 |
-| nm0200122 | William Daniels | 1963 | 2025 | 62 | 16 | The Graduate | 1967 | 8.00 | 6.55 | 4.30 | 2.25 |
-| nm0426958 | Johny | 1984 | 2022 | 38 | 17 | Rajavinte Makan | 1986 | 7.70 | 7.10 | 4.86 | 2.24 |
-| nm0690450 | Kaviyoor Ponnamma | 1973 | 2021 | 48 | 45 | Sandesham | 1991 | 9.00 | 7.68 | 5.44 | 2.24 |
-| nm0639684 | Margaret O'Brien | 1942 | 2018 | 76 | 22 | Our Vines Have Tender Grapes | 1945 | 7.60 | 6.73 | 4.50 | 2.23 |
-| nm0215167 | Martin Dejdar | 1987 | 2020 | 33 | 15 | Tichá bolest | 1991 | 8.00 | 6.31 | 4.08 | 2.23 |
-| nm0363055 | Harish | 1991 | 2017 | 26 | 16 | Rowdy Inspector | 1992 | 6.90 | 5.23 | 3.00 | 2.23 |
-| nm0052410 | Reggie Bannister | 1976 | 2017 | 41 | 25 | Kenny & Company | 1976 | 7.10 | 6.28 | 4.08 | 2.20 |
-| nm1498467 | Kalasala Babu | 1988 | 2017 | 29 | 29 | Paadha Mudhra | 1988 | 7.40 | 7.40 | 5.20 | 2.20 |
-| nm0200645 | Ray Danton | 1955 | 1975 | 20 | 26 | I'll Cry Tomorrow | 1955 | 7.20 | 6.10 | 3.90 | 2.20 |
-| nm0831905 | Harold J. Stone | 1956 | 1980 | 24 | 18 | The Harder They Fall | 1956 | 7.50 | 6.43 | 4.25 | 2.18 |
-| nm0451863 | Shobha Khote | 1955 | 2022 | 67 | 27 | Gol Maal | 1979 | 8.50 | 6.73 | 4.56 | 2.17 |
-| nm0001947 | Turhan Bey | 1941 | 1994 | 53 | 20 | The Gay Falcon | 1941 | 6.50 | 5.94 | 3.80 | 2.14 |
-| nm0562920 | Virginia Mayo | 1943 | 1997 | 54 | 48 | The Best Years of Our Lives | 1946 | 8.10 | 6.19 | 4.06 | 2.13 |
-| nm0374974 | Helen | 1957 | 2012 | 55 | 56 | Jewel Thief | 1967 | 7.90 | 6.63 | 4.51 | 2.12 |
-| nm0226326 | Eileen Dietz | 1966 | 2026 | 60 | 24 | Road Movie | 1973 | 6.90 | 5.73 | 3.62 | 2.11 |
+| nconst | primaryName | first_year | last_year | career_years | movies | best_movie | best_year | best_rating | early_avg_rating | late_avg_rating | rating_drop | early_avg_votes | late_avg_votes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| nm0000043 | Veronica Lake | 1941 | 1970 | 29 | 20 | Sullivan's Travels | 1941 | 7.90 | 6.42 | 2.50 | 3.92 | 4278.00 | 808.00 |
+| nm0025618 | Mahesh Anand | 1988 | 2019 | 31 | 32 | Abhimanyu | 1991 | 7.40 | 5.47 | 1.90 | 3.57 | 739.00 | 317.00 |
+| nm0680927 | Philomina | 1983 | 2003 | 20 | 16 | Godfather | 1991 | 8.60 | 7.33 | 3.80 | 3.53 | 839.00 | 241.00 |
+| nm0939961 | Robert Woods | 1966 | 2016 | 50 | 22 | My Name Is Pecos | 1966 | 6.10 | 5.12 | 1.70 | 3.42 | 340.00 | 477.00 |
+| nm0738553 | Artur Rolén | 1918 | 1967 | 49 | 20 | The Outlaw and His Wife | 1918 | 7.20 | 7.20 | 3.85 | 3.35 | 2373.00 | 139.00 |
+| nm0060692 | Aleksey Batalov | 1954 | 2007 | 53 | 16 | The Cranes Are Flying | 1957 | 8.30 | 7.35 | 4.05 | 3.30 | 3367.00 | 221.00 |
+| nm0562770 | Ken Maynard | 1931 | 1970 | 39 | 19 | Harmony Trail | 1944 | 6.70 | 5.97 | 2.70 | 3.27 | 147.00 | 1084.00 |
+| nm0936295 | Norman Wisdom | 1953 | 2002 | 49 | 18 | A Stitch in Time | 1963 | 6.90 | 6.31 | 3.20 | 3.11 | 979.00 | 280.00 |
+| nm0767741 | Tom Savini | 1977 | 2015 | 38 | 20 | From Dusk Till Dawn | 1996 | 7.20 | 6.13 | 3.16 | 2.97 | 64898.00 | 701.00 |
+| nm0007147 | Dev Anand | 1951 | 2003 | 52 | 41 | Guide | 1965 | 8.40 | 7.11 | 4.16 | 2.95 | 758.00 | 318.00 |
+| nm0044600 | Saroja Devi B. | 1958 | 2023 | 65 | 16 | Babruvahana | 1977 | 8.90 | 8.01 | 5.07 | 2.94 | 259.00 | 3200.00 |
+| nm0015629 | Tuncay Akça | 1975 | 2018 | 43 | 19 | The Chaos Class Failed the Class | 1975 | 8.30 | 6.74 | 3.90 | 2.84 | 4500.00 | 480.00 |
+| nm0619870 | Reza Naji | 1997 | 2025 | 28 | 18 | Children of Heaven | 1997 | 8.20 | 7.30 | 4.52 | 2.78 | 21879.00 | 580.00 |
+| nm0008206 | Akbar Abdi | 1987 | 2023 | 36 | 40 | Mother | 1990 | 8.40 | 6.46 | 3.69 | 2.77 | 1316.00 | 1176.00 |
+| nm0351352 | Coşkun Göğen | 1975 | 2022 | 47 | 23 | Arkadasim | 1982 | 7.20 | 5.46 | 2.70 | 2.76 | 744.00 | 850.00 |
+| nm0613098 | Caroline Munro | 1972 | 2020 | 48 | 19 | The Spy Who Loved Me | 1977 | 7.00 | 5.59 | 2.83 | 2.76 | 15932.00 | 698.00 |
+| nm0499614 | Ari Lehman | 1978 | 2026 | 48 | 17 | Manny's Orphans | 1978 | 6.40 | 6.40 | 3.68 | 2.72 | 104.00 | 792.00 |
+| nm0878597 | Deborah Twiss | 1997 | 2025 | 28 | 16 | Kick-Ass | 2010 | 7.60 | 6.60 | 3.88 | 2.72 | 209177.00 | 359.00 |
+| nm0164967 | Robert Clarke | 1945 | 1990 | 45 | 28 | The Enchanted Cottage | 1945 | 7.50 | 5.49 | 2.87 | 2.62 | 857.00 | 1256.00 |
+| nm0006370 | Manoj Kumar | 1962 | 1995 | 33 | 20 | My Name Is Joker | 1970 | 7.90 | 7.02 | 4.43 | 2.59 | 864.00 | 697.00 |
+| nm0015145 | Halit Akçatepe | 1972 | 2005 | 33 | 35 | The Chaos Class | 1975 | 9.10 | 7.16 | 4.57 | 2.59 | 7578.00 | 5626.00 |
+| nm0431889 | Arline Judge | 1931 | 1963 | 32 | 26 | From This Day Forward | 1946 | 6.40 | 5.88 | 3.30 | 2.58 | 409.00 | 2179.00 |
+| nm0838517 | Sumalatha | 1980 | 2023 | 43 | 25 | Thoovanathumbikal | 1987 | 8.60 | 7.23 | 4.67 | 2.56 | 878.00 | 2177.00 |
+| nm0042820 | Suzan Avcı | 1962 | 2003 | 41 | 40 | Before the Ice Thaws | 1965 | 7.60 | 5.82 | 3.27 | 2.55 | 328.00 | 897.00 |
+| nm0518579 | Ulli Lommel | 1964 | 2020 | 56 | 25 | Chinese Roulette | 1976 | 7.20 | 5.64 | 3.10 | 2.54 | 1361.00 | 2752.00 |
+| nm0454448 | Andrea King | 1944 | 1994 | 50 | 24 | Ride the Pink Horse | 1947 | 7.20 | 6.49 | 3.95 | 2.54 | 1483.00 | 631.00 |
+| nm9969854 | Rekha | 1986 | 2026 | 40 | 28 | In Harihar Nagar | 1990 | 8.60 | 7.34 | 4.89 | 2.45 | 1557.00 | 582.00 |
+| nm0006428 | Arlene Dahl | 1947 | 1991 | 44 | 26 | Journey to the Center of the Earth | 1959 | 7.00 | 6.20 | 3.80 | 2.40 | 1707.00 | 444.00 |
+| nm0093921 | Derek Bond | 1947 | 1998 | 51 | 23 | Scott of the Antarctic | 1948 | 7.00 | 6.08 | 3.70 | 2.38 | 775.00 | 103.00 |
+| nm0557625 | Raju Shrestha | 1972 | 2012 | 40 | 16 | Bawarchi | 1972 | 8.10 | 7.00 | 4.62 | 2.38 | 1211.00 | 295.00 |
+| nm0450810 | Evelyn Keyes | 1939 | 1989 | 50 | 34 | Gone with the Wind | 1939 | 8.20 | 6.52 | 4.15 | 2.37 | 14070.00 | 4134.00 |
+| nm0900568 | Rena Vlahopoulou | 1962 | 1982 | 20 | 21 | The Robber Cries Thief! | 1965 | 7.50 | 6.14 | 3.77 | 2.37 | 623.00 | 178.00 |
+| nm0135988 | Lilli Carati | 1975 | 2015 | 40 | 17 | Highway Racer | 1977 | 6.40 | 5.07 | 2.70 | 2.37 | 474.00 | 361.00 |
+| nm0449431 | András Kern | 1973 | 2016 | 43 | 22 | Cat City | 1986 | 8.20 | 7.19 | 4.83 | 2.36 | 1827.00 | 1023.00 |
+| nm0129316 | Giuliana Calandra | 1973 | 2008 | 35 | 23 | Love & Anarchy | 1973 | 7.70 | 5.98 | 3.70 | 2.28 | 2888.00 | 945.00 |
+| nm0200122 | William Daniels | 1963 | 2025 | 62 | 16 | The Graduate | 1967 | 8.00 | 6.55 | 4.30 | 2.25 | 34168.00 | 573.00 |
+| nm0426958 | Johny | 1984 | 2022 | 38 | 17 | Rajavinte Makan | 1986 | 7.70 | 7.10 | 4.86 | 2.24 | 303.00 | 980.00 |
+| nm0690450 | Kaviyoor Ponnamma | 1973 | 2021 | 48 | 45 | Sandesham | 1991 | 9.00 | 7.68 | 5.44 | 2.24 | 1758.00 | 667.00 |
+| nm0639684 | Margaret O'Brien | 1942 | 2018 | 76 | 22 | Our Vines Have Tender Grapes | 1945 | 7.60 | 6.73 | 4.50 | 2.23 | 3851.00 | 685.00 |
+| nm0215167 | Martin Dejdar | 1987 | 2020 | 33 | 15 | Tichá bolest | 1991 | 8.00 | 6.31 | 4.08 | 2.23 | 370.00 | 312.00 |
+| nm0363055 | Harish | 1991 | 2017 | 26 | 16 | Rowdy Inspector | 1992 | 6.90 | 5.23 | 3.00 | 2.23 | 1041.00 | 465.00 |
+| nm0052410 | Reggie Bannister | 1976 | 2017 | 41 | 25 | Kenny & Company | 1976 | 7.10 | 6.28 | 4.08 | 2.20 | 15484.00 | 3980.00 |
+| nm1498467 | Kalasala Babu | 1988 | 2017 | 29 | 29 | Paadha Mudhra | 1988 | 7.40 | 7.40 | 5.20 | 2.20 | 198.00 | 572.00 |
+| nm0200645 | Ray Danton | 1955 | 1975 | 20 | 26 | I'll Cry Tomorrow | 1955 | 7.20 | 6.10 | 3.90 | 2.20 | 707.00 | 551.00 |
+| nm0831905 | Harold J. Stone | 1956 | 1980 | 24 | 18 | The Harder They Fall | 1956 | 7.50 | 6.43 | 4.25 | 2.18 | 5572.00 | 1958.00 |
+| nm0451863 | Shobha Khote | 1955 | 2022 | 67 | 27 | Gol Maal | 1979 | 8.50 | 6.73 | 4.56 | 2.17 | 1848.00 | 1108.00 |
+| nm0001947 | Turhan Bey | 1941 | 1994 | 53 | 20 | The Gay Falcon | 1941 | 6.50 | 5.94 | 3.80 | 2.14 | 1199.00 | 453.00 |
+| nm0562920 | Virginia Mayo | 1943 | 1997 | 54 | 48 | The Best Years of Our Lives | 1946 | 8.10 | 6.19 | 4.06 | 2.13 | 4272.00 | 256.00 |
+| nm0374974 | Helen | 1957 | 2012 | 55 | 56 | Jewel Thief | 1967 | 7.90 | 6.63 | 4.51 | 2.12 | 639.00 | 1476.00 |
+| nm0226326 | Eileen Dietz | 1966 | 2026 | 60 | 24 | Road Movie | 1973 | 6.90 | 5.73 | 3.62 | 2.11 | 1326.00 | 885.00 |
 
 _5513 rows in total, first 50 shown._
 
