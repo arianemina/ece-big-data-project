@@ -49,6 +49,15 @@ def clean_names(names):
         .withColumn("deathYear",
                     F.when(impossible | future_death, None)
                     .otherwise(F.col("deathYear")))
+        # Born more than MAX_LIFESPAN years ago with no deathYear: the
+        # person has almost certainly died and only deathYear is missing.
+        # birthYear is kept (it is plausible) and the row is flagged so
+        # that age based analyses can exclude it.
+        .withColumn("dq_missing_death_year",
+                    F.coalesce(F.col("deathYear").isNull()
+                               & (F.col("birthYear")
+                                  < REFERENCE_YEAR - MAX_LIFESPAN),
+                               F.lit(False)))
         .drop("_future_birth", "_future_death", "_impossible")
     )
 

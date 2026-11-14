@@ -62,3 +62,14 @@ def test_clean_applies_rules(spark, raw_dir):
     assert [r["tconst"] for r in clean["title_ratings"].collect()] == ["tt1"]
     assert clean["title_akas"].count() == 2
     assert clean["title_episode"].count() == 1
+
+
+def test_clean_flags_missing_death_year(spark):
+    from imdb.preparation.clean import clean_names
+    names = spark.createDataFrame(
+        [("nm_old", "Old", 1850, None), ("nm_young", "Young", 1990, None)],
+        "nconst STRING, primaryName STRING, birthYear INT, deathYear INT")
+    rows = {r["nconst"]: r for r in clean_names(names).collect()}
+    assert rows["nm_old"]["birthYear"] == 1850
+    assert rows["nm_old"]["dq_missing_death_year"] is True
+    assert rows["nm_young"]["dq_missing_death_year"] is False
