@@ -1042,3 +1042,295 @@ TODO (written by the team)
 ### Methodological explanation
 
 TODO (written by the team)
+
+## Open question
+
+### Question, motivation and additional data
+
+**Have the most popular films become more international since 1980, and do
+films led by talent born outside the United States perform differently?**
+
+The share of global box office and streaming hits that does not come from
+Hollywood is often said to be growing (British actors in American
+franchises, Indian and Korean cinema reaching worldwide audiences). IMDb
+alone cannot test this, because it has no nationality or country of birth
+for people. We measure it on the films that dominate each genre every year:
+the first three principals (IMDb billing order) of the top 10 feature films
+per (genre, year) by number of votes, 1980-2025. This is the selection
+already built for the enrichment step: 9,832 (film, genre, year) rows,
+6,821 films and 20,431 (film, principal) credits.
+
+Additional data: the **country of birth** of each principal, from
+**Wikidata**. The place of birth comes from property P19, its country from
+P17, and the ISO 3166 code from P297. The Wikidata item of each person was
+already found by the enrichment, through property P345 (IMDb ID).
+Wikidata is a human-curated open database (CC0). The source of every value
+is kept: the SPARQL endpoint and the retrieval time are stored with each
+answer, and the queries follow the same rate limits as the enrichment (200
+items per query, one query per second, a User-Agent with contact
+information).
+
+The question requires several joins:
+- the enrichment targets (`title.basics`, `title.ratings` and
+  `title.principals` already ranked);
+- the IMDb → Wikidata links;
+- the Wikidata birth countries;
+- then aggregations by period, genre, category and film.
+
+### Results
+
+<!-- RESULTS: coverage -->
+
+**coverage**
+
+| scope | principals | known_country | born_abroad | pct_born_abroad | pct_known | no_wikidata_item | no_birth_country | ambiguous_country |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| all | 20431 | 18036 | 8620 | 47.80 | 88.30 | 1804 | 591 | 101 |
+
+_1 rows in total._
+
+<!-- RESULTS: trend_by_period, profiles_by_period -->
+
+**trend_by_period**
+
+| period | principals | known_country | born_abroad | pct_born_abroad | pct_known |
+| --- | --- | --- | --- | --- | --- |
+| 1980-1984 | 2087 | 1878 | 964 | 51.30 | 90.00 |
+| 1985-1989 | 2120 | 1881 | 809 | 43.00 | 88.70 |
+| 1990-1994 | 2191 | 1985 | 849 | 42.80 | 90.60 |
+| 1995-1999 | 2106 | 1935 | 886 | 45.80 | 91.90 |
+| 2000-2004 | 2162 | 1978 | 951 | 48.10 | 91.50 |
+| 2005-2009 | 2164 | 1956 | 884 | 45.20 | 90.40 |
+| 2010-2014 | 2410 | 2095 | 1063 | 50.70 | 86.90 |
+| 2015-2019 | 2357 | 2011 | 1011 | 50.30 | 85.30 |
+| 2020-2024 | 2375 | 1937 | 1009 | 52.10 | 81.60 |
+| 2025-2025 | 459 | 380 | 194 | 51.10 | 82.80 |
+
+_10 rows in total._
+
+**profiles_by_period**
+
+| period | us_only | mixed | abroad_only |
+| --- | --- | --- | --- |
+| 1980-1984 | 208 | 185 | 253 |
+| 1985-1989 | 245 | 211 | 191 |
+| 1990-1994 | 259 | 220 | 201 |
+| 1995-1999 | 227 | 230 | 199 |
+| 2000-2004 | 206 | 259 | 203 |
+| 2005-2009 | 213 | 273 | 168 |
+| 2010-2014 | 178 | 312 | 211 |
+| 2015-2019 | 175 | 321 | 192 |
+| 2020-2024 | 167 | 284 | 213 |
+| 2025-2025 | 32 | 59 | 40 |
+
+_10 rows in total._
+
+<!-- RESULTS: by_genre -->
+
+**by_genre**
+
+| genre | known_country | pct_born_abroad | pct_1980s | pct_2016_2025 | change_pts |
+| --- | --- | --- | --- | --- | --- |
+| Thriller | 1338 | 37.20 | 29.00 | 51.90 | 22.90 |
+| Crime | 1357 | 33.00 | 23.10 | 44.70 | 21.60 |
+| Sci-Fi | 1330 | 38.10 | 27.80 | 48.90 | 21.10 |
+| Comedy | 1358 | 27.80 | 21.20 | 41.90 | 20.70 |
+| Drama | 1362 | 36.60 | 29.30 | 47.90 | 18.60 |
+| Romance | 1356 | 35.50 | 27.70 | 45.50 | 17.80 |
+| Fantasy | 1331 | 46.80 | 39.10 | 55.90 | 16.80 |
+| Horror | 1318 | 36.40 | 27.50 | 44.20 | 16.70 |
+| Action | 1364 | 40.20 | 32.50 | 48.30 | 15.80 |
+| Sport | 1188 | 43.40 | 44.30 | 57.80 | 13.50 |
+| War | 1164 | 73.20 | 67.00 | 80.10 | 13.10 |
+| Mystery | 1330 | 37.00 | 32.30 | 43.20 | 10.90 |
+| Adventure | 1370 | 41.40 | 39.00 | 46.60 | 7.60 |
+| Music | 1227 | 45.60 | 43.10 | 48.40 | 5.30 |
+| Family | 1310 | 43.00 | 49.10 | 54.30 | 5.20 |
+| Biography | 1285 | 47.90 | 49.30 | 51.50 | 2.20 |
+| Musical | 1234 | 78.10 | 70.30 | 66.80 | -3.50 |
+| Documentary | 784 | 46.70 | 54.80 | 45.20 | -9.60 |
+| History | 1233 | 68.90 | 71.80 | 60.10 | -11.70 |
+| Western | 914 | 45.30 | 67.00 | 34.20 | -32.80 |
+| Animation | 1295 | 49.70 | 72.90 | 36.50 | -36.40 |
+| News | 134 | 46.30 | 100.00 | 47.50 | -52.50 |
+
+_22 rows in total._
+
+<!-- RESULTS: top_countries_by_decade -->
+
+**top_countries_by_decade**
+
+| decade | country_iso | country_label | people | rank |
+| --- | --- | --- | --- | --- |
+| 1980s | GB | United Kingdom | 241 | 1 |
+| 1980s | JP | Japan | 113 | 2 |
+| 1980s | FR | France | 98 | 3 |
+| 1980s | IN | India | 86 | 4 |
+| 1980s | IT | Italy | 75 | 5 |
+| 1990s | GB | United Kingdom | 230 | 1 |
+| 1990s | IN | India | 130 | 2 |
+| 1990s | JP | Japan | 103 | 3 |
+| 1990s | FR | France | 97 | 4 |
+| 1990s | CA | Canada | 74 | 5 |
+| 2000s | GB | United Kingdom | 275 | 1 |
+| 2000s | IN | India | 122 | 2 |
+| 2000s | FR | France | 90 | 3 |
+| 2000s | CA | Canada | 74 | 4 |
+| 2000s | JP | Japan | 74 | 5 |
+| 2010s | GB | United Kingdom | 337 | 1 |
+| 2010s | IN | India | 145 | 2 |
+| 2010s | CA | Canada | 78 | 3 |
+| 2010s | AU | Australia | 73 | 4 |
+| 2010s | FR | France | 61 | 5 |
+| 2020s | GB | United Kingdom | 259 | 1 |
+| 2020s | IN | India | 161 | 2 |
+| 2020s | CA | Canada | 56 | 3 |
+| 2020s | AU | Australia | 32 | 4 |
+| 2020s | DE | Germany | 32 | 5 |
+
+_25 rows in total._
+
+<!-- RESULTS: share_by_role, trend_actors_actresses -->
+
+**share_by_role**
+
+| role | principals | known_country | born_abroad | pct_born_abroad | pct_known |
+| --- | --- | --- | --- | --- | --- |
+| cast | 20006 | 17815 | 8522 | 47.80 | 89.00 |
+| crew | 425 | 221 | 98 | 44.30 | 52.00 |
+
+_2 rows in total._
+
+**trend_actors_actresses**
+
+| period | actors_pct_born_abroad | actresses_pct_born_abroad |
+| --- | --- | --- |
+| 1980-1984 | 51.70 | 49.90 |
+| 1985-1989 | 43.40 | 40.40 |
+| 1990-1994 | 41.60 | 43.80 |
+| 1995-1999 | 45.20 | 47.00 |
+| 2000-2004 | 48.30 | 50.10 |
+| 2005-2009 | 45.80 | 44.80 |
+| 2010-2014 | 51.40 | 50.20 |
+| 2015-2019 | 49.20 | 53.20 |
+| 2020-2024 | 54.70 | 49.30 |
+| 2025-2025 | 53.80 | 44.40 |
+
+_10 rows in total._
+
+<!-- RESULTS: performance_by_profile -->
+
+**performance_by_profile**
+
+| profile | films | avg_rating | median_votes | rating_vs_year | log10_votes_vs_year |
+| --- | --- | --- | --- | --- | --- |
+| abroad_only | 1871 | 6.93 | 10233 | 0.28 | -0.44 |
+| mixed | 2354 | 6.53 | 87021 | -0.12 | 0.23 |
+| us_only | 1910 | 6.53 | 56098 | -0.12 | 0.14 |
+
+_3 rows in total._
+
+### Key takeaways
+
+1. **All-American line-ups are declining and mixed line-ups are taking
+   their place.**
+   - Films whose known principals were all born in the US went from 32 % of
+     the films in 1980-1984 (208 / 646) to 25 % in 2020-2024 (167 / 664).
+   - Films mixing US-born and foreign-born principals went from 29 % to
+     43 % (185 → 284), with a peak of 321 films in 2015-2019.
+2. **Inside the mainstream genres, the share of talent born abroad grew a
+   lot.**
+   - The gain between the 1980s and 2016-2025 is between +16 and +23
+     points for Thriller (29 % → 52 %), Crime, Sci-Fi, Comedy, Drama,
+     Romance, Fantasy, Horror and Action.
+   - The overall curve looks flatter (51 % → 52 %, with a low point of
+     43 % in the late 1980s) because of a composition effect. In the
+     1980s, the most-voted films of some genres were mostly non-American,
+     and US films later took those genres over:
+     - Animation (Japanese animation): 73 % born abroad in the 1980s,
+       37 % in 2016-2025;
+     - Western (Italian westerns): 67 % → 34 %.
+   - Musical, History and War stay mostly non-American (60-80 %) over the
+     whole period.
+3. **The United Kingdom is by far the first source of foreign-born talent,
+   and India is the second.**
+   - The UK is first in every decade (337 people in the 2010s).
+   - India is second since the 1990s.
+   - Japan drops out of the top 5 in the 2010s and France in the 2020s.
+     They are replaced by Canada and Australia, two other English-speaking
+     countries, and in the 2020s by Germany.
+   - The internationalisation of popular films is mostly an
+     *English-speaking* one.
+4. **Films with only foreign-born principals are rated higher but watched
+   (voted) less.**
+   - Compared with the other selected films of the same year, they score
+     +0.28 rating points, but have about 2.8 times fewer votes
+     (log10 difference -0.44).
+   - Mixed and US-only films have the same relative rating (-0.12), but
+     mixed films get the most votes (about 1.7 times the yearly average).
+   - The most popular films are the ones that mix American and foreign
+     talent.
+5. Actors and actresses follow the same trend: in 2020-2024, 55 % of the
+   actors and 49 % of the actresses were born abroad.
+
+### Methodological explanation
+
+**Population.** We reuse the enrichment targets (top 10 per genre and year
+by number of votes, first three principals) instead of all IMDb credits,
+for three reasons:
+- the question is about *popular* films;
+- the selection is consistent with Q2 and with the enrichment;
+- it keeps the number of Wikidata requests small (9,195 items, 46
+  queries).
+
+The code is generic: running the enrichment with `ENRICH_TOP_N=0` and
+`ENRICH_PRINCIPALS=0` gives the whole dataset.
+
+**Country of birth.** A place of birth can have several countries in
+Wikidata. The rules are:
+- a current state wins over a historical one (Soviet Union, Yugoslavia,
+  Czechoslovakia, East Germany);
+- the remaining ties, a place claimed by two current states (101 credits,
+  0.5 %), are broken alphabetically and flagged `ambiguous_country`.
+
+We use the country of the place of birth because it is the most complete
+field. Citizenship (P27) is often missing or multiple, so it would have
+needed arbitrary choices. The limit is that P17 is the *current* country of
+the place: someone born in Kyiv in 1950 counts as born in Ukraine. The
+birth country is known for 88.3 % of the credits. The 11.7 % left have no
+Wikidata item (1,804), no place of birth or a place without a country
+(591). Coverage falls from about 90 % before 2010 to about 82 % after 2020,
+because recent and less famous actors are less documented. This could
+under-estimate the foreign share for the last years.
+
+**Measures.**
+- Shares are computed on (film, principal) credits with a known country,
+  counted once per film for the time trend and once per genre row for the
+  genre table.
+- Genres with fewer than 100 known credits are left out.
+- For the performance comparison, each film with at least two known
+  principals gets a profile (`us_only`, `mixed` or `abroad_only`). It is
+  compared with the average of the selected films *of the same year*
+  (rating difference, and log10 difference of the number of votes),
+  because recent films have both more votes and more foreign principals.
+
+**Alternatives considered.**
+1. **Original language or country of production.** Using the original
+   language of the film (the `languages.py` inference of Q6) or the
+   country of production would answer "are the films international?"
+   rather than "is the talent international?". IMDb has no production
+   country, and the language inference from `title.akas` is noisier than
+   Wikidata birthplaces.
+2. **All credits instead of the top 10.** Weighting all credits instead of
+   the top 10 would follow the volume of production (dominated by
+   Indian and other national industries) and not popularity.
+3. **Ratings by country with a regression.** Comparing ratings country by
+   country with a regression model would control for genre and year at the
+   same time. We kept the simpler year-centred comparison: it is easy to
+   explain, and three profiles are enough to answer the question. A
+   regression is a natural next step.
+4. **Bias of IMDb votes.** IMDb votes come mostly from English-speaking
+   users, which favours English-language films in a "top by votes"
+   selection. This bias is the same for every year, so the *trend* stays
+   meaningful, but the absolute level of non-English talent is
+   under-estimated.
