@@ -23,8 +23,13 @@ source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-Spark memory can be tuned with environment variables, for example
-`export SPARK_DRIVER_MEMORY=6g` on a machine with less RAM.
+Spark runs in local mode. Its memory is set with environment variables:
+
+| Variable | Default | Use |
+| --- | --- | --- |
+| `SPARK_DRIVER_MEMORY` | `4g` | Driver memory; keep it at about half of the RAM (for example `2g` on an 8 GB laptop, `8g` on 16 GB) |
+| `SPARK_SHUFFLE_PARTITIONS` | `64` | Number of shuffle partitions |
+| `SPARK_MASTER` | `local[*]` | Spark master URL |
 
 ## Data download
 
