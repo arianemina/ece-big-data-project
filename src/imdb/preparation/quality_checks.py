@@ -9,6 +9,7 @@ Usage: python -m imdb.preparation.quality_checks
 
 import os
 
+from pyspark import StorageLevel
 from pyspark.sql import functions as F
 
 from imdb.common import get_spark, write_output
@@ -56,6 +57,7 @@ def build_checks(t):
         principals.select("tconst", "nconst", "category")
         .join(basics.select("tconst", "startYear"), "tconst")
         .join(person_years, "nconst")
+        .persist(StorageLevel.MEMORY_AND_DISK)
     )
 
     return [
@@ -164,7 +166,12 @@ def build_checks(t):
 
 def run_checks(spark, raw_dir=None, output_dir=None, sample_rows=20):
     """Run every check and return the summary DataFrame."""
-    tables = typed_tables(spark, raw_dir)
+    # Parse the raw files once: every check reuses the persisted tables
+    # instead of reading and decompressing the .tsv.gz files again.
+    tables = {
+        name: df.persist(StorageLevel.MEMORY_AND_DISK)
+        for name, df in typed_tables(spark, raw_dir).items()
+    }
     table_sizes = {name: df.count() for name, df in tables.items()}
     summary = []
     for name, table, description, offending in build_checks(tables):
@@ -175,6 +182,7 @@ def run_checks(spark, raw_dir=None, output_dir=None, sample_rows=20):
         if count:
             write_output(offending.limit(sample_rows), SECTION,
                          f"dq_sample_{name}", output_dir)
+    spark.catalog.clearCache()
     return spark.createDataFrame(
         summary,
         "check STRING, table STRING, description STRING, "
