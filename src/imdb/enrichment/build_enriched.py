@@ -278,7 +278,9 @@ def main():
     write_output(cov, C.SECTION, "coverage")
     cov.show(truncate=False)
     for df, name in ((films, "film_notes"), (principals, "principal_notes")):
-        notes = df.groupBy("enrichment_note").count() \
+        note = F.coalesce("enrichment_note",
+                          F.lit("none (fully enriched)"))
+        notes = df.groupBy(note.alias("enrichment_note")).count() \
             .orderBy(F.desc("count"))
         write_output(notes, C.SECTION, name)
         notes.show(truncate=False)
