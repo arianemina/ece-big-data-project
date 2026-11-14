@@ -228,7 +228,7 @@ The tests run on a small hand written sample and do not need the IMDb files.
 
 | Tool | Used by | Tasks |
 | --- | --- | --- |
-| Claude Code (Anthropic) | Ariane | Code of the Docker/Kafka environment, the data enrichment pipeline, the streaming pipeline, the open question and their tests; write-up of the *Open question* section of `REPORT.md` (after AI use was allowed for the report) |
+| Claude Code (Anthropic) | Ariane | Code of the Docker/Kafka environment, the data enrichment pipeline, the streaming pipeline, the open question and their tests; |
 | TODO | Lisa | TODO |
 
 Any AI help for the explanations in `REPORT.md` is listed in this table.
