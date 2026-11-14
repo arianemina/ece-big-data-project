@@ -810,4 +810,178 @@ TODO (written by the team)
 
 ## Streaming data processing
 
-TODO
+Test run of 2026-11-14, 20:43-21:16 UTC: the Spark job ran for 33 minutes,
+the producer forwarded 63,496 live `recentchange` events for 30 minutes, and
+3,000 events from 30 minutes earlier were replayed at minute 12 (late data).
+
+### Overview of the test run
+
+<!-- RESULTS: overview, query_metrics -->
+
+**overview**
+
+| first_event | last_event | matched_events | distinct_imdb_entities | delayed_beyond_watermark | avg_delay_s | max_delay_s |
+| --- | --- | --- | --- | --- | --- | --- |
+| 2026-11-14 20:24:42 | 2026-11-14 21:12:03 | 139 | 111 | 7 | 92.50 | 1791 |
+
+_1 rows in total._
+
+**query_metrics**
+
+| query | batches | input_rows | avg_input_rows_per_s | max_processed_rows_per_s | avg_batch_ms | max_batch_ms | rows_dropped_by_watermark | last_watermark |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| matched_events | 62 | 66496 | 35.80 | 1687.80 | 2185.10 | 5410 | 0 |  |
+| traffic_windows | 63 | 66496 | 35.30 | 2709.90 | 1511.90 | 2975 | 2 | 2026-11-14T21:02:05.000Z |
+| entity_windows | 63 | 66496 | 35.30 | 1660.80 | 2166.90 | 5465 | 7 | 2026-11-14T21:02:03.000Z |
+
+_3 rows in total._
+
+### Matches by type and most edited IMDb entities
+
+<!-- RESULTS: matches_by_type, top_entities -->
+
+**matches_by_type**
+
+| entity_type | match_type | bare_key | count |
+| --- | --- | --- | --- |
+| person | imdb_person | True | 74 |
+| person | enriched_article | True | 25 |
+| film | imdb_title | False | 14 |
+| series | imdb_title | True | 7 |
+| film | enriched_article | True | 5 |
+| film | imdb_title | True | 4 |
+| person | enriched_article | False | 3 |
+| series | imdb_title | False | 3 |
+| film | enriched_article | False | 3 |
+| person | imdb_person | False | 1 |
+
+_10 rows in total._
+
+**top_entities**
+
+| imdb_id | imdb_name | entity_type | edits | editors | bytes_delta |
+| --- | --- | --- | --- | --- | --- |
+| tt1679335 | Trolls | film | 5 | 2 | 7 |
+| nm0004938 | Kirk Franklin | person | 4 | 1 | 165 |
+| tt38672588 | Masterplan | film | 4 | 1 | 2584 |
+| nm10806242 | Sharvari | person | 3 | 1 | -11 |
+| tt34384661 | Godzilla Minus Zero | film | 3 | 3 | 4 |
+| tt4378376 | Babylon Berlin | series | 3 | 1 | 309 |
+| nm0001084 | Ice Cube | person | 2 | 1 | 15 |
+| nm0001790 | Sharon Tate | person | 2 | 2 | 0 |
+| nm0918633 | Stephnie Weir | person | 2 | 1 | 25 |
+| nm1089685 | Vanessa Ferlito | person | 2 | 1 | 43 |
+| nm1184886 | Jim Florentine | person | 2 | 1 | 51 |
+| nm1261984 | Eddie George | person | 2 | 1 | 0 |
+| nm1277102 | Queen | person | 2 | 1 | 23 |
+| nm3584268 | James Norton | person | 2 | 1 | 62 |
+| nm4731677 | Ayushmann Khurrana | person | 2 | 2 | 0 |
+| nm7184459 | Saverio Raimondo | person | 2 | 1 | -2 |
+| tt11680468 | Great Pretender | series | 2 | 1 | -18 |
+| tt13542714 | House of Guinness | series | 2 | 1 | 97 |
+| nm0000054 | Marilyn Monroe | person | 1 | 1 | -3586 |
+| nm0000717 | Kareem Abdul-Jabbar | person | 1 | 1 | 35 |
+
+_111 rows in total, first 20 shown._
+
+### Finalised event-time windows
+
+<!-- RESULTS: finalised_windows -->
+
+**finalised_windows**
+
+| window_start | window_end | matched_edits | entities | article_edits | bot_edits | match_rate_pct |
+| --- | --- | --- | --- | --- | --- | --- |
+| 2026-11-14 20:40:00 | 2026-11-14 20:45:00 | 9 | 7 | 232 | 17 | 3.88 |
+| 2026-11-14 20:45:00 | 2026-11-14 20:50:00 | 13 | 9 | 387 | 31 | 3.36 |
+| 2026-11-14 20:50:00 | 2026-11-14 20:55:00 | 21 | 21 | 406 | 88 | 5.17 |
+| 2026-11-14 20:55:00 | 2026-11-14 21:00:00 | 27 | 26 | 519 | 163 | 5.20 |
+
+_4 rows in total._
+
+### Streamed windows compared with a batch recount
+
+<!-- RESULTS: window_reconciliation -->
+
+**window_reconciliation**
+
+| window_start | window_end | batch_edits | batch_entities | streamed_edits | emitted_by_stream | missing_in_stream |
+| --- | --- | --- | --- | --- | --- | --- |
+| 2026-11-14 20:20:00 | 2026-11-14 20:25:00 | 2 | 2 |  | False | 2 |
+| 2026-11-14 20:25:00 | 2026-11-14 20:30:00 | 5 | 5 |  | False | 5 |
+| 2026-11-14 20:40:00 | 2026-11-14 20:45:00 | 9 | 7 | 9 | True | 0 |
+| 2026-11-14 20:45:00 | 2026-11-14 20:50:00 | 13 | 9 | 13 | True | 0 |
+| 2026-11-14 20:50:00 | 2026-11-14 20:55:00 | 21 | 21 | 21 | True | 0 |
+| 2026-11-14 20:55:00 | 2026-11-14 21:00:00 | 27 | 26 | 27 | True | 0 |
+| 2026-11-14 21:00:00 | 2026-11-14 21:05:00 | 30 | 25 |  | False | 30 |
+| 2026-11-14 21:05:00 | 2026-11-14 21:10:00 | 22 | 19 |  | False | 22 |
+| 2026-11-14 21:10:00 | 2026-11-14 21:15:00 | 10 | 9 |  | False | 10 |
+
+_9 rows in total._
+
+### Events delayed beyond the watermark
+
+<!-- RESULTS: late_events -->
+
+**late_events**
+
+| event_time | kafka_time | ingestion_delay_s | title | imdb_id | match_type |
+| --- | --- | --- | --- | --- | --- |
+| 2026-11-14 20:24:42 | 2026-11-14 20:54:33.129000 | 1791 | Barry Martin | nm0551951 | imdb_person |
+| 2026-11-14 20:24:49 | 2026-11-14 20:54:33.225000 | 1784 | Lorne Balfe | nm1154632 | imdb_person |
+| 2026-11-14 20:25:05 | 2026-11-14 20:54:33.349000 | 1768 | Madagascar: Escape 2 Africa | tt0479952 | enriched_article |
+| 2026-11-14 20:25:14 | 2026-11-14 20:54:33.430000 | 1759 | Johnny Vegas | nm0891943 | imdb_person |
+| 2026-11-14 20:25:33 | 2026-11-14 20:54:33.671000 | 1740 | Gene Roddenberry | nm0734472 | imdb_person |
+| 2026-11-14 20:25:35 | 2026-11-14 20:54:33.627000 | 1738 | Little Bear (TV series) | tt0245637 | imdb_title |
+| 2026-11-14 20:25:42 | 2026-11-14 20:54:33.696000 | 1731 | Trace Lysette | nm6006903 | imdb_person |
+
+_7 rows in total._
+
+### Matched events
+
+<!-- RESULTS: matched_events -->
+
+**matched_events**
+
+| event_time | title | imdb_id | entity_type | match_type | user | bytes_delta | delayed_beyond_watermark |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-11-14 20:24:42 | Barry Martin | nm0551951 | person | imdb_person | Tassedethe | 95 | True |
+| 2026-11-14 20:24:49 | Lorne Balfe | nm1154632 | person | imdb_person | ~2026-60385-34 | 12 | True |
+| 2026-11-14 20:25:05 | Madagascar: Escape 2 Africa | tt0479952 | film | enriched_article | Suleeabc2 | -1 | True |
+| 2026-11-14 20:25:14 | Johnny Vegas | nm0891943 | person | imdb_person | ~2026-52346-47 | 8 | True |
+| 2026-11-14 20:25:33 | Gene Roddenberry | nm0734472 | person | imdb_person | Starst90 | 4 | True |
+| 2026-11-14 20:25:35 | Little Bear (TV series) | tt0245637 | series | imdb_title | ~2026-59016-42 | 37 | True |
+| 2026-11-14 20:25:42 | Trace Lysette | nm6006903 | person | imdb_person | ~2026-60386-51 | 1 | True |
+| 2026-11-14 20:42:18 | Campbell Scott | nm0001714 | person | enriched_article | AnomieBOT | 19 | False |
+| 2026-11-14 20:42:26 | Stephnie Weir | nm0918633 | person | imdb_person | Stonecold415 | 19 | False |
+| 2026-11-14 20:42:35 | Stephnie Weir | nm0918633 | person | imdb_person | Stonecold415 | 6 | False |
+| 2026-11-14 20:42:53 | Sharon Tate | nm0001790 | person | imdb_person | Nonojonyy | 7 | False |
+| 2026-11-14 20:43:44 | Queen | nm1277102 | person | imdb_person | Bkonrad | 24 | False |
+| 2026-11-14 20:43:57 | Queen | nm1277102 | person | imdb_person | Bkonrad | -1 | False |
+| 2026-11-14 20:44:18 | The General's Daughter (film) | tt0144214 | film | imdb_title | ~2026-51475-41 | 7 | False |
+| 2026-11-14 20:44:30 | Ice Cube | nm0001084 | person | enriched_article | AquaHeart3 | 11 | False |
+| 2026-11-14 20:44:55 | Godzilla Minus Zero | tt34384661 | film | imdb_title | Eiga-Kevin2 | 0 | False |
+| 2026-11-14 20:45:21 | Sharon Tate | nm0001790 | person | imdb_person | Celjski Grad | -7 | False |
+| 2026-11-14 20:45:31 | Ice Cube | nm0001084 | person | enriched_article | AquaHeart3 | 4 | False |
+| 2026-11-14 20:45:44 | Henry | nm11437554 | person | imdb_person | Bkonrad | -7 | False |
+| 2026-11-14 20:46:51 | Belén Cuesta | nm3177382 | person | enriched_article | Asqueladd | 2 | False |
+| 2026-11-14 20:47:00 | Cecil Kellaway | nm0445523 | person | imdb_person | RustyPeg | 81 | False |
+| 2026-11-14 20:47:42 | Eddie George | nm1261984 | person | imdb_person | Erik255 | 0 | False |
+| 2026-11-14 20:47:46 | Terry Pratchett | nm0695332 | person | imdb_person | InternetArchiveBot | 142 | False |
+| 2026-11-14 20:47:56 | Elaine Hendrix | nm0005006 | person | enriched_article | Anightmareonelmstreet193 | -452 | False |
+| 2026-11-14 20:48:00 | Kirk Franklin | nm0004938 | person | imdb_person | Hometown Kid | 41 | False |
+| 2026-11-14 20:48:01 | Eddie George | nm1261984 | person | imdb_person | Erik255 | 0 | False |
+| 2026-11-14 20:48:57 | Kirk Franklin | nm0004938 | person | imdb_person | Hometown Kid | 112 | False |
+| 2026-11-14 20:49:20 | Kirk Franklin | nm0004938 | person | imdb_person | Hometown Kid | 4 | False |
+| 2026-11-14 20:49:43 | Kirk Franklin | nm0004938 | person | imdb_person | Hometown Kid | 8 | False |
+| 2026-11-14 20:50:16 | Chantal Akerman | nm0001901 | person | enriched_article | JhowieNitnek | 40 | False |
+
+_139 rows in total, first 30 shown._
+
+### Handling of late-arriving data
+
+TODO (written by the team)
+
+### Methodological explanation
+
+TODO (written by the team)
