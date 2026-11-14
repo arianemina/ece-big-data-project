@@ -11,7 +11,9 @@
 
 - Python 3.10 or newer
 - Java 17 or 21 (required by Spark 4)
-- About 15 GB of free disk space and 8 GB of RAM for the full IMDb dataset
+- About 30 GB of free disk space (IMDb files, cleaned Parquet tables and up
+  to about 20 GB of Spark spill files during the checks and the cleaning) and
+  8 GB of RAM for the full IMDb dataset
 
 ## Setup
 
