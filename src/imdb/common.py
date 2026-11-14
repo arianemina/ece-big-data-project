@@ -44,7 +44,7 @@ def get_spark(app_name="imdb"):
         .appName(app_name)
         .master(os.environ.get("SPARK_MASTER", "local[*]"))
         .config("spark.driver.memory",
-                os.environ.get("SPARK_DRIVER_MEMORY", "8g"))
+                os.environ.get("SPARK_DRIVER_MEMORY", "4g"))
         .config("spark.sql.shuffle.partitions",
                 os.environ.get("SPARK_SHUFFLE_PARTITIONS", "64"))
         .config("spark.sql.session.timeZone", "UTC")
