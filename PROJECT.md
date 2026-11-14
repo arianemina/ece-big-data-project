@@ -198,6 +198,24 @@ Sinks (Parquet): `data/streaming/sinks/` (`matched_events`,
 delete `data/streaming/checkpoints`, `data/streaming/sinks` and
 `data/streaming/metrics`.
 
+## Open question
+
+Run after the enrichment step:
+
+```bash
+scripts/run_open_question.sh
+```
+
+1. `imdb.open_question.fetch_birth_countries` (plain Python): for every
+   principal whose Wikidata item was found by the enrichment, queries the
+   place of birth (P19) and its country (P17, ISO code P297) with SPARQL,
+   200 items per query and one query per second. Answers go to
+   `data/open_question/raw/birth_countries.jsonl` (resumable, CC0).
+2. `imdb.open_question.foreign_born` (Spark): joins the enrichment targets,
+   the Wikidata links and the birth countries, and writes the result tables
+   to `output/open_question`. `OQ_HOME_COUNTRY` (default `US`) sets the
+   reference country.
+
 ## Tests
 
 ```bash
@@ -210,8 +228,7 @@ The tests run on a small hand written sample and do not need the IMDb files.
 
 | Tool | Used by | Tasks |
 | --- | --- | --- |
-| Claude Code (Anthropic) | Ariane | Code of the Docker/Kafka environment, the data enrichment pipeline, the streaming pipeline and their tests |
+| Claude Code (Anthropic) | Ariane | Code of the Docker/Kafka environment, the data enrichment pipeline, the streaming pipeline, the open question and their tests; write-up of the *Open question* section of `REPORT.md` (after AI use was allowed for the report) |
 | TODO | Lisa | TODO |
 
-The methodological explanations and reasoning in `REPORT.md` were written
-by the group members without AI tools.
+Any AI help for the explanations in `REPORT.md` is listed in this table.
