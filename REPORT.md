@@ -122,7 +122,22 @@ _7 rows in total._
 
 ### Methodological explanation
 
-TODO (written by the team)
+We first read the raw TSV files with every column as a string, so we could
+see the missing values as they really are. A value counts as missing if it is
+null, `\N` or an empty string. We also had to turn off the quote option,
+because some titles have a single `"` that broke the lines. After that we
+gave each column its real type (numbers, arrays for the lists like genres).
+
+For the quality checks we looked for things that can't be true: duplicated
+ids, people who die before they are born or live more than 120 years,
+credits before the person's birth, runtimes of 0, ratings outside 1-10, and
+ids that point to nothing in another table (orphans).
+
+When cleaning, we tried not to throw away rows that are still useful. Wrong
+years are set to null and the row gets a `dq_` flag instead of being deleted.
+Rows that link to a title or a person that doesn't exist are removed, which
+is why akas, episodes and principals lose a few thousand rows. The clean
+tables are saved in Parquet so the next steps run faster.
 
 ## Data exploration
 
@@ -724,7 +739,35 @@ _5 rows in total._
 
 ### Methodological explanation
 
-TODO (written by the team)
+For every question we only used the cleaned tables. A "movie" here is a
+non-adult title of type `movie` that lasts more than 40 minutes (the usual
+feature film rule). We often added a minimum number of votes, because a
+rating from five people doesn't mean much.
+
+For Q1, runtimes are very skewed (some art films last days), so a normal
+z-score only catches the extreme ones. We used a robust z-score on the log of
+the runtime, with the median and the MAD of each genre, and kept films with
+|z| >= 3.5. This way we also find films that are much shorter than usual.
+For Q2 the popularity of a genre in a year is the total number of votes of
+its movies, and we keep the three highest. For Q3 we compared these three
+genres with the rest using their share of votes, votes per movie and a
+rating weighted by votes.
+
+For Q4 we kept directors with exactly one movie rated 8 or more and at least
+two movies rated 6 or less (movies with 100+ votes). We also tried a second
+reading of the question, where the average of the other movies is 6 or less.
+For Q5 we counted episodes per season (season 0 is ignored), kept series with
+at least three seasons of 10+ episodes, and checked where the best and worst
+rated episodes are.
+
+For Q6, IMDb has no original language, so we guessed it from the akas marked
+as original title, using the language code or the main language of the
+region. A film is a success with a rating of 7+ and 5,000+ votes. For Q7 we
+split each career in two halves at its middle year, and an actor peaked early
+if their best film and their best average rating are in the first half. For
+Q8 we took the roles from principals and crew, kept people with at least two
+roles (each on 3+ movies), and compared their movies with one role and with
+several roles.
 
 ## Data enrichment
 
@@ -863,7 +906,23 @@ _20431 rows in total, first 30 shown._
 
 ### Methodological explanation
 
-TODO (written by the team)
+We added data from Wikipedia (synopses and biographies) and Wikidata (the
+link between IMDb and Wikipedia, birth dates and birthplaces). We couldn't
+take every IMDb title, so we kept the 10 most voted films of each year and
+genre between 1980 and 2025, and the first three people credited on each
+film. That gives 6,821 films and 10,479 people.
+
+The download part is a normal Python script, not Spark. It finds the
+Wikidata item of each IMDb id (property P345) with SPARQL, then gets the
+Wikipedia article of the film and the introduction of each person's page. We
+stayed under the Wikimedia rate limit and saved everything in JSON files, so
+we could restart the script when it stopped.
+
+Then Spark reads these files with a fixed schema, takes the "Plot" section
+of each film (or the introduction if there is none), cleans the text and
+joins it back to IMDb. Each row keeps its source (link, revision, date,
+license) and a note explaining why some data is missing. About 95 % of the
+films and 87 % of the people got a text.
 
 ## Streaming data processing
 
@@ -1037,17 +1096,49 @@ _139 rows in total, first 30 shown._
 
 ### Handling of late-arriving data
 
-TODO (written by the team)
+Our windows use the time of the edit on Wikipedia and not the time Spark
+receives it. We used 5-minute windows and a 10-minute watermark, which means
+Spark waits 10 minutes before closing a window. Normally events arrive in a
+few seconds, so this is enough.
+
+To test it, we sent again 3,000 events from 30 minutes earlier while the job
+was running. Seven of them matched IMDb, and since they were too old, Spark
+didn't add them to the windows (we can see it in the dropped rows metric).
+We still kept them in `matched_events`, so the batch recount at the end finds
+them again in the 20:20 and 20:25 windows. The last three windows are missing
+for another reason: the job stopped before they could be closed.
 
 ### Methodological explanation
 
-TODO (written by the team)
+We used the Wikimedia `recentchange` feed, which sends every Wikipedia edit
+live. A Python producer reads it and puts the events in a Kafka topic, with
+Kafka running in Docker. Spark Structured Streaming then reads the topic,
+keeps only article edits on English Wikipedia and compares the page title
+with a table built from IMDb.
+
+This table contains the article titles from the enrichment, the popular
+films and series (5,000+ votes) written like Wikipedia titles ("Title
+(film)", "Title (1995 film)"...) and the names of their cast and crew. When a
+name could mean several people, we keep the most popular one. The results
+go to three Parquet outputs: every matched edit, the edits per IMDb entity
+per window, and the total traffic per window. In our 33-minute test, 139
+edits matched 111 IMDb entities, so around 3 to 5 % of the edits.
 
 ## Open question
 
 ### Question, motivation and additional data
 
-TODO (written by the team)
+Our question is: have the most popular films become more international since
+1980? In other words, are the people at the top of the cast more and more
+often born outside the United States, and are these films rated or watched
+differently?
+
+We chose it because people often say Hollywood is more global now, with more
+British or Australian actors and more foreign films getting a big audience,
+and we wanted to see if the data agrees. IMDb doesn't say where people were
+born, so we used Wikidata to get the birthplace of each person (P19) and its
+country (P17). We kept the same films and people as in the enrichment part,
+and we found the country for 88 % of them.
 
 ### Results
 
@@ -1204,8 +1295,32 @@ _3 rows in total._
 
 ### Key takeaways
 
-TODO (written by the team)
+The answer is not a clear yes. In 1980-1984, 51 % of the people were already
+born outside the US. This went down to about 43 % around 1990 and then came
+back up to 50-52 % after 2010. What really changed is that films mix more:
+films with both US-born and foreign-born people went from 29 % to 43 %, and
+films with only Americans dropped from 32 % to 25 %.
+
+The rise is clear in big genres like thriller, crime, sci-fi and comedy (about
++20 points), but animation, western and history went down. The UK is always
+the first foreign country, and India is second from the 1990s. Films with
+only foreign-born people get better ratings but about three times fewer
+votes, while mixed films get the most votes. One limit is that born abroad
+doesn't always mean a foreigner in an American film, since the sample also
+has Indian or Japanese films. Also, people from recent films are less often
+found in Wikidata.
 
 ### Methodological explanation
 
-TODO (written by the team)
+We joined the selected films, their first three people and the countries
+from Wikidata in Spark. When a place had several countries (for example a
+city in the USSR that is now in Ukraine), we took the current one. A person
+is "born abroad" if the country is not the US, and people with no known
+country are left out of the percentages.
+
+We then computed the share of people born abroad per 5-year period, per
+genre (1980s against 2016-2025), for actors and actresses, and the main
+foreign countries per decade. For the ratings part, each film is labelled
+US only, mixed or abroad only. Since recent films have more votes and more
+foreign actors at the same time, we compared each film to the average of its
+own year before comparing the groups.
