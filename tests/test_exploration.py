@@ -70,6 +70,7 @@ def clean_dir(spark, tmp_path, monkeypatch):
     # A very long drama and a short film that is not feature length.
     basics.append(movie("ttlong", 2001, 900, ["Drama"]))
     basics.append(movie("ttshort", 2001, 20, ["Drama"]))
+    basics.append(movie("ttbrief", 2001, 45, ["Drama"]))
 
     # TV series: 3 seasons of 10 episodes, best in S1, worst in S3.
     basics.append(("tts", "tvSeries", "Show", "Show", 0, 2000, 2003, None,
@@ -86,6 +87,13 @@ def clean_dir(spark, tmp_path, monkeypatch):
             if (season, ep) == (3, 10):
                 rating = 3.0
             ratings.append((tconst, rating, 100))
+    # Specials (season 0) rated higher than everything, and an announced
+    # season 4 with no ratings yet: neither must change the answer.
+    for tconst, season in (("tts0e1", 0), ("tts4e1", 4)):
+        basics.append((tconst, "tvEpisode", tconst, tconst, 0, 2004,
+                       None, 40, ["Drama"]))
+        episodes.append((tconst, "tts", season, 1))
+    ratings.append(("tts0e1", 10.0, 100))
 
     tables = {
         "title_basics": (basics, BASICS),
@@ -115,11 +123,12 @@ def test_feature_movies_excludes_short_films(spark, clean_dir):
     assert "tts" not in ids
 
 
-def test_q1_finds_very_long_movie(spark, clean_dir):
-    outliers = q1_runtime_outliers.runtime_outliers(
-        feature_movies(spark), z_threshold=2)
-    ids = {(r.tconst, r.direction) for r in outliers.collect()}
-    assert ("ttlong", "longer") in ids
+def test_q1_finds_long_and_short_movies(spark, clean_dir):
+    outliers = q1_runtime_outliers.runtime_outliers(feature_movies(spark))
+    ids = {(r.genre, r.tconst, r.direction) for r in outliers.collect()}
+    assert ("Drama", "ttlong", "longer") in ids
+    assert ("Drama", "ttbrief", "shorter") in ids
+    assert not any(t == "ttd1" for _, t, _ in ids)
 
 
 def test_q2_ranks_genres_by_votes(spark, clean_dir):
