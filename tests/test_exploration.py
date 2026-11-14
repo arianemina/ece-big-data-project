@@ -146,6 +146,12 @@ def test_q4_one_hit_director(spark, clean_dir):
     assert [r.nconst for r in rows] == ["nm_dir"]
     assert rows[0].movies_rated_6_or_less == 3
     assert rows[0].hit_rating == 8.5
+    # Other movies: 5.0, 6.0, 4.0, 7.0 -> average 5.5.
+    average = q4_directors.one_hit_directors(spark, min_votes=0,
+                                             interpretation="average")
+    rows = average.collect()
+    assert [r.nconst for r in rows] == ["nm_dir"]
+    assert rows[0].avg_rating_of_other_movies == 5.5
 
 
 def test_q5_series(spark, clean_dir):

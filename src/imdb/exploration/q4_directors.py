@@ -30,7 +30,13 @@ def director_movies(spark, min_votes=MIN_VOTES):
         "numVotes")
 
 
-def one_hit_directors(spark, min_votes=MIN_VOTES):
+def one_hit_directors(spark, min_votes=MIN_VOTES, interpretation="each"):
+    """Directors with exactly one movie rated >= 8.0.
+
+    interpretation="each": at least MIN_LOW_MOVIES other movies are each
+    rated <= 6.0. interpretation="average": at least MIN_LOW_MOVIES other
+    movies whose average rating, taken together, is <= 6.0.
+    """
     films = director_movies(spark, min_votes)
     high = F.col("averageRating") >= HIGH_RATING
     low = F.col("averageRating") <= LOW_RATING
@@ -42,20 +48,30 @@ def one_hit_directors(spark, min_votes=MIN_VOTES):
                                     "startYear"))).alias("hit"),
         F.round(F.avg(F.when(low, F.col("averageRating"))), 2)
         .alias("avg_rating_of_low_movies"),
-    )
+        F.round(F.avg(F.when(~high, F.col("averageRating"))), 2)
+        .alias("avg_rating_of_other_movies"),
+    ).withColumn("other_movies", F.col("rated_movies") - 1)
+    if interpretation == "each":
+        condition = F.col("movies_rated_6_or_less") >= MIN_LOW_MOVIES
+    elif interpretation == "average":
+        condition = ((F.col("other_movies") >= MIN_LOW_MOVIES)
+                     & (F.col("avg_rating_of_other_movies") <= LOW_RATING))
+    else:
+        raise ValueError(f"unknown interpretation {interpretation}")
     result = per_director.where(
-        (F.col("movies_rated_8_plus") == 1)
-        & (F.col("movies_rated_6_or_less") >= MIN_LOW_MOVIES)
+        (F.col("movies_rated_8_plus") == 1) & condition
     ).select(
         "nconst",
         F.col("hit.primaryTitle").alias("hit_title"),
         F.col("hit.startYear").alias("hit_year"),
         F.col("hit.averageRating").alias("hit_rating"),
-        "movies_rated_6_or_less", "avg_rating_of_low_movies", "rated_movies",
+        "movies_rated_6_or_less", "avg_rating_of_low_movies",
+        "other_movies", "avg_rating_of_other_movies", "rated_movies",
     )
     return with_names(spark, result).select(
         "nconst", "primaryName", "hit_title", "hit_year", "hit_rating",
-        "movies_rated_6_or_less", "avg_rating_of_low_movies", "rated_movies")
+        "movies_rated_6_or_less", "avg_rating_of_low_movies",
+        "other_movies", "avg_rating_of_other_movies", "rated_movies")
 
 
 def main():
@@ -63,7 +79,11 @@ def main():
     result = one_hit_directors(spark).orderBy(
         F.desc("movies_rated_6_or_less"), "primaryName")
     total = write_output(result, SECTION, "q4_one_hit_directors")
-    print(f"{total} directors found")
+    print(f"{total} directors found (each other movie rated <= 6.0)")
+    average = one_hit_directors(spark, interpretation="average").orderBy(
+        F.desc("other_movies"), "primaryName")
+    n_avg = write_output(average, SECTION, "q4_one_hit_directors_average")
+    print(f"{n_avg} directors found (other movies average <= 6.0)")
     result.show(30, truncate=False)
     spark.stop()
 
