@@ -112,6 +112,25 @@ def to_seconds(interval):
     return int(value) * factor
 
 
+def ensure_topic(bootstrap, topic, partitions=3):
+    """Create the Kafka topic if it does not exist yet.
+
+    The Spark Kafka source fails on a missing topic, so the job can be
+    started before the producer on a fresh Kafka broker.
+    """
+    from kafka.admin import KafkaAdminClient, NewTopic
+    from kafka.errors import TopicAlreadyExistsError
+
+    admin = KafkaAdminClient(bootstrap_servers=bootstrap)
+    try:
+        admin.create_topics([NewTopic(topic, partitions, 1)])
+        print(f"created Kafka topic {topic}")
+    except TopicAlreadyExistsError:
+        pass
+    finally:
+        admin.close()
+
+
 def read_events(spark, bootstrap, topic, starting_offsets):
     raw = (
         spark.readStream.format("kafka")
@@ -185,6 +204,7 @@ def main():
     reference = spark.read.parquet(C.REFERENCE).cache()
     print(f"reference keys loaded: {reference.count():,}")
 
+    ensure_topic(args.bootstrap, args.topic)
     events = read_events(spark, args.bootstrap, args.topic,
                          args.starting_offsets)
     articles = filter_articles(events, args.wikis)
