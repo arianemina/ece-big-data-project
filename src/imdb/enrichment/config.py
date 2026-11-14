@@ -31,4 +31,5 @@ N_PRINCIPALS = int(os.environ.get("ENRICH_PRINCIPALS", "3"))
 
 WIKIPEDIA_API = "https://en.wikipedia.org/w/api.php"
 WIKIDATA_SPARQL = "https://query.wikidata.org/sparql"
-CONTENT_LICENSE = "CC BY-SA 4.0"
+WIKIPEDIA_LICENSE = "CC BY-SA 4.0"   # article text (synopsis, biography)
+WIKIDATA_LICENSE = "CC0 1.0"         # structured data (links, dates, place)

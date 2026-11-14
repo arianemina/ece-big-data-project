@@ -17,6 +17,8 @@ programmatically why a field is missing.
 Usage: python -m imdb.enrichment.build_enriched
 """
 
+import os
+
 from pyspark.sql import Window
 from pyspark.sql import functions as F
 from pyspark.sql import types as T
@@ -61,17 +63,49 @@ LEAD_REGEX = r"(?s)^(.*?)(?=\n== [^=]|$)"
 MIN_TEXT_LENGTH = 40   # shorter texts are treated as empty
 
 
-def read_jsonl(spark, path, schema):
-    """Read a JSON Lines file with an enforced schema.
+def read_jsonl(spark, paths, schema):
+    """Read JSON Lines files with an enforced schema.
 
-    Malformed lines (e.g. truncated by an interruption) are dropped.
+    Files that do not exist yet (gathering step not run) are skipped, so the
+    job still runs and writes "not fetched yet" notes. Malformed lines (e.g.
+    truncated by an interruption) are dropped.
     """
+    if isinstance(paths, str):
+        paths = [paths]
+    existing = [p for p in paths if os.path.exists(p)]
+    if not existing:
+        return spark.createDataFrame([], schema)
     return (
         spark.read.schema(schema)
         .option("mode", "DROPMALFORMED")
-        .json(path)
+        .json(existing)
         .filter(F.col("imdb_id").isNotNull())
     )
+
+
+def lineage():
+    """Provenance of an enriched record, per source.
+
+    Text fields (synopsis, biography) come from the Wikipedia revision in
+    ``source_url`` (CC BY-SA); the article link and, for people, the birth
+    and death dates and the birthplace come from the Wikidata item in
+    ``wikidata_uri`` (CC0).
+    """
+    has_page = F.col("permalink").isNotNull()
+    has_item = F.col("wikidata_uri").isNotNull()
+    return F.struct(
+        F.col("permalink").alias("source_url"),
+        F.col("page_url").alias("article_url"),
+        F.col("revision_id").alias("revision_id"),
+        F.col("page_retrieved_at").cast("timestamp")
+         .alias("retrieved_at"),
+        F.when(has_page, F.lit(C.WIKIPEDIA_LICENSE)).alias("license"),
+        F.col("wikidata_uri").alias("wikidata_uri"),
+        F.col("link_retrieved_at").cast("timestamp")
+         .alias("wikidata_retrieved_at"),
+        F.when(has_item, F.lit(C.WIKIDATA_LICENSE))
+         .alias("wikidata_license"),
+    ).alias("lineage")
 
 
 def latest_per_id(df, order_col="retrieved_at"):
@@ -136,16 +170,7 @@ def build_films(spark, links, pages):
         F.when(F.col("plot").isNotNull(), "plot_section")
          .when(F.col("lead").isNotNull(), "lead_section")
          .alias("synopsis_source"),
-        F.struct(
-            F.col("permalink").alias("source_url"),
-            F.col("page_url").alias("article_url"),
-            F.col("revision_id").alias("revision_id"),
-            F.col("wikidata_uri").alias("wikidata_uri"),
-            F.coalesce("page_retrieved_at", "link_retrieved_at")
-             .cast("timestamp").alias("retrieved_at"),
-            F.when(F.col("permalink").isNotNull(),
-                   F.lit(C.CONTENT_LICENSE)).alias("license"),
-        ).alias("lineage"),
+        lineage(),
         F.when(F.col("wikidata_uri").isNull(),
                "No Wikidata item found for this IMDb ID")
          .when(F.col("wikipedia_url").isNull(),
@@ -191,16 +216,7 @@ def build_principals(spark, links, pages):
         parse_wikidata_date("death_date").alias("death_date"),
         F.trim("birth_place").alias("birth_place"),
         "wikipedia_title", "biography",
-        F.struct(
-            F.col("permalink").alias("source_url"),
-            F.col("page_url").alias("article_url"),
-            F.col("revision_id").alias("revision_id"),
-            F.col("wikidata_uri").alias("wikidata_uri"),
-            F.coalesce("page_retrieved_at", "link_retrieved_at")
-             .cast("timestamp").alias("retrieved_at"),
-            F.when(F.col("permalink").isNotNull(),
-                   F.lit(C.CONTENT_LICENSE)).alias("license"),
-        ).alias("lineage"),
+        lineage(),
         F.when(F.col("wikidata_uri").isNull(),
                "No Wikidata item found for this IMDb ID")
          .when(F.col("wikipedia_url").isNull(),

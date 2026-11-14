@@ -90,3 +90,30 @@ def test_resume_skips_ids_already_fetched(tmp_path):
 def test_title_from_url():
     assert fetch_wikipedia.title_from_url(
         "https://en.wikipedia.org/wiki/Am%C3%A9lie_(film)") == "Amélie (film)"
+
+
+def test_missing_raw_files_are_skipped(spark, tmp_path):
+    present = tmp_path / "links.jsonl"
+    present.write_text('{"imdb_id": "tt1", "entity_type": "film"}\n')
+    df = build_enriched.read_jsonl(
+        spark, [str(present), str(tmp_path / "not_fetched.jsonl")],
+        build_enriched.LINK_SCHEMA)
+    assert [r.imdb_id for r in df.collect()] == ["tt1"]
+    empty = build_enriched.read_jsonl(
+        spark, str(tmp_path / "nothing.jsonl"), build_enriched.PAGE_SCHEMA)
+    assert empty.count() == 0
+
+
+def test_lineage_licenses_per_source(spark):
+    df = spark.createDataFrame(
+        [("p", "u", 1, "2026-11-12T10:00:00+00:00", "wd",
+          "2026-11-12T09:00:00+00:00"),
+         (None, None, None, None, "wd", "2026-11-12T09:00:00+00:00")],
+        "permalink STRING, page_url STRING, revision_id LONG, "
+        "page_retrieved_at STRING, wikidata_uri STRING, "
+        "link_retrieved_at STRING")
+    rows = df.select(build_enriched.lineage()).collect()
+    assert rows[0].lineage.license == "CC BY-SA 4.0"
+    assert rows[0].lineage.wikidata_license == "CC0 1.0"
+    assert rows[1].lineage.license is None          # no article fetched
+    assert rows[1].lineage.wikidata_license == "CC0 1.0"

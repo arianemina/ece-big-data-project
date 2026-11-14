@@ -3,7 +3,7 @@
 Data gathering is done outside Spark (allowed by the instructions); the raw
 API answers are appended to JSON Lines files and every later step (cleaning,
 section extraction, schema enforcement, joins) is done in Spark by
-``src.enrichment.build_enriched``.
+``imdb.enrichment.build_enriched``.
 
 Steps:
 1. ``links``  - map IMDb IDs to Wikidata items and English Wikipedia
@@ -108,7 +108,8 @@ def title_from_url(url):
 # Step 1: Wikidata links
 # --------------------------------------------------------------------------
 def fetch_links(client, ids, entity_type, out_path):
-    todo = [i for i in ids if i not in already_done(out_path)]
+    done = already_done(out_path)          # read the file once, not per ID
+    todo = [i for i in ids if i not in done]
     print(f"[links/{entity_type}] {len(todo):,} IDs to resolve")
     query = FILM_QUERY if entity_type == "film" else PERSON_QUERY
     for n, batch in enumerate(batches(todo, SPARQL_BATCH), 1):
