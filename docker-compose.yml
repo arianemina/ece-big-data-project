@@ -49,6 +49,11 @@ services:
     volumes:
       - ./:/app
       - ivy-cache:/ivy
+      # Spark shuffle/spill files. A crashed job leaves them behind, so they
+      # live in a named volume (emptied by `docker compose down -v`) instead
+      # of growing the container layer.
+      - spark-tmp:/tmp
 
 volumes:
   ivy-cache:
+  spark-tmp:
