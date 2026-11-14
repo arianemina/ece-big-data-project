@@ -42,9 +42,19 @@ docker compose exec spark scripts/run_preparation.sh
 Every `python -m ...` or `scripts/...` command of this guide can be run in
 the container by prefixing it with `docker compose exec spark`. The
 container reads and writes the repository folder, so `data/` and `output/`
-are shared with the host. The default driver memory in the container is
-2 GB (Docker Desktop with 4 GB); set `SPARK_DRIVER_MEMORY` before
-`docker compose up` to change it. Stop everything with `docker compose down`;
+are shared with the host.
+
+In the container, `SPARK_DRIVER_MEMORY` defaults to `2g` and
+`SPARK_SHUFFLE_PARTITIONS` to `16`, sized for Docker Desktop with 4 GB of
+memory. They replace the local defaults; export them before
+`docker compose up` to change them (for example `SPARK_DRIVER_MEMORY=4g`
+with 8 GB given to Docker).
+
+The first streaming run downloads the Spark Kafka connector
+(`spark-sql-kafka`) from Maven Central, so it needs internet access and
+takes a minute longer; the `ivy-cache` volume keeps it for later runs.
+
+Stop everything with `docker compose down`;
 `docker compose down -v` also deletes the Spark temporary files (they can
 take several GB after a job that crashed) and the Spark packages cache.
 
