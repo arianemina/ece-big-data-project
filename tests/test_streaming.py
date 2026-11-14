@@ -63,10 +63,11 @@ def test_filter_and_match(spark):
         F.struct(F.lit("u").alias("uri")).alias("meta"),
     )
     reference = spark.createDataFrame(
-        [("inception", "film", "tt1", "Inception", 1, "imdb_title", 1)],
+        [("inception", "film", "tt1", "Inception", 1, "imdb_title", True,
+          1)],
         "match_key STRING, entity_type STRING, imdb_id STRING, "
         "imdb_name STRING, popularity LONG, match_type STRING, "
-        "n_candidates LONG")
+        "bare_key BOOLEAN, n_candidates LONG")
     articles = stream_processor.filter_articles(events, ["enwiki"])
     assert articles.count() == 2              # namespace, wiki, type filters
     matched = stream_processor.match_imdb(articles, reference, 600) \

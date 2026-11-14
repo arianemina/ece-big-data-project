@@ -102,7 +102,7 @@ def main():
     ), C.SECTION, "overview")
 
     write_output(
-        matched.groupBy("entity_type", "match_type").count()
+        matched.groupBy("entity_type", "match_type", "bare_key").count()
         .orderBy(F.desc("count")),
         C.SECTION, "matches_by_type")
 

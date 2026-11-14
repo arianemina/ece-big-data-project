@@ -158,7 +158,7 @@ def match_imdb(articles, reference, watermark_seconds):
             F.col("revision.new").alias("revision_id"),
             F.col("meta.uri").alias("event_uri"),
             "imdb_id", "imdb_name", "entity_type", "match_type",
-            "n_candidates",
+            "bare_key", "n_candidates",
             lateness.alias("ingestion_delay_s"),
             (lateness > watermark_seconds).alias("delayed_beyond_watermark"),
         )
