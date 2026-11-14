@@ -44,7 +44,9 @@ the container by prefixing it with `docker compose exec spark`. The
 container reads and writes the repository folder, so `data/` and `output/`
 are shared with the host. The default driver memory in the container is
 2 GB (Docker Desktop with 4 GB); set `SPARK_DRIVER_MEMORY` before
-`docker compose up` to change it. Stop everything with `docker compose down`.
+`docker compose up` to change it. Stop everything with `docker compose down`;
+`docker compose down -v` also deletes the Spark temporary files (they can
+take several GB after a job that crashed) and the Spark packages cache.
 
 ## Data download
 
