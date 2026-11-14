@@ -40,6 +40,20 @@ def test_title_and_person_keys(spark):
     assert "christopher nolan (actor)" not in people   # job not held
 
 
+def test_enriched_article_wins_over_imdb_title(spark):
+    candidates = spark.createDataFrame(
+        [("heat (1995 film)", "film", "tt1", "Heat", 700000, "imdb_title"),
+         ("heat (1995 film)", "film", "tt1", "Heat", 700000,
+          "enriched_article"),
+         ("heat (1995 film)", "film", "tt9", "Heat", 10, "imdb_title")],
+        "match_key STRING, entity_type STRING, imdb_id STRING, "
+        "imdb_name STRING, popularity LONG, match_type STRING")
+    rows = build_reference.best_candidate_per_key(candidates).collect()
+    assert len(rows) == 1
+    assert (rows[0].imdb_id, rows[0].match_type, rows[0].n_candidates) == (
+        "tt1", "enriched_article", 2)
+
+
 def test_filter_and_match(spark):
     events = spark.createDataFrame(
         [("enwiki", 0, "edit", "Inception", 1794500000, 1794500030),

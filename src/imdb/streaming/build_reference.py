@@ -128,6 +128,31 @@ def person_keys(principals, names, titles):
     )
 
 
+def best_candidate_per_key(candidates):
+    """Keep one IMDb entity per match key.
+
+    Priority: exact enriched article title, then IMDb title, then person;
+    ties are broken by popularity. The same (key, entity) pair can come from
+    several sources, so no dropDuplicates is done before the ranking.
+    """
+    priority = F.create_map(*[x for k, v in PRIORITY.items()
+                              for x in (F.lit(k), F.lit(v))])
+    w_rank = Window.partitionBy("match_key").orderBy(
+        priority[F.col("match_type")], F.desc_nulls_last("popularity"),
+        "imdb_id")
+    w_all = Window.partitionBy("match_key")
+    return (
+        candidates
+        # True when the page title is the bare IMDb name (no "(film)", ...)
+        .withColumn("bare_key", F.col("match_key") == key("imdb_name"))
+        .filter(F.length("match_key") >= 3)
+        .withColumn("n_candidates",
+                    F.size(F.collect_set("imdb_id").over(w_all)))
+        .withColumn("_rn", F.row_number().over(w_rank))
+        .filter("_rn = 1").drop("_rn")
+    )
+
+
 def enriched_keys(spark):
     """Exact article titles found by the enrichment pipeline, if present."""
     parts = []
@@ -176,21 +201,7 @@ def main():
     for part in enriched_keys(spark):
         candidates = candidates.unionByName(part)
 
-    priority = F.create_map(*[x for k, v in PRIORITY.items()
-                              for x in (F.lit(k), F.lit(v))])
-    w_rank = Window.partitionBy("match_key").orderBy(
-        priority[F.col("match_type")], F.desc_nulls_last("popularity"),
-        "imdb_id")
-    w_all = Window.partitionBy("match_key")
-    reference = (
-        candidates.dropDuplicates(["match_key", "imdb_id"])
-        # True when the page title is the bare IMDb name (no "(film)", ...)
-        .withColumn("bare_key", F.col("match_key") == key("imdb_name"))
-        .filter(F.length("match_key") >= 3)
-        .withColumn("n_candidates", F.count("*").over(w_all))
-        .withColumn("_rn", F.row_number().over(w_rank))
-        .filter("_rn = 1").drop("_rn")
-    )
+    reference = best_candidate_per_key(candidates)
     reference.coalesce(1).write.mode("overwrite").parquet(C.REFERENCE)
     reference = spark.read.parquet(C.REFERENCE)
     print(f"reference keys: {reference.count():,}")
