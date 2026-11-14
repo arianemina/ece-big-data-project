@@ -1,7 +1,9 @@
 """Q5: TV series with at least three seasons of 10 or more episodes, whose
 worst episode is in the last season and best episode in the first two seasons.
 
-Seasons are counted from title.episode (all episodes, rated or not). Worst and
+Seasons are counted from title.episode (all episodes, rated or not), from
+season 1 onwards: season 0, used by IMDb for specials, is ignored. The last
+season is the last one with rated episodes. Worst and
 best episodes are taken among episodes with at least MIN_VOTES votes. When
 several episodes share the best (or worst) rating, every one of them must sit
 in the required seasons.
@@ -29,7 +31,7 @@ def qualifying_series(spark, min_votes=MIN_VOTES):
         F.col("primaryTitle").alias("series_title"),
         F.col("startYear").alias("series_start"))
     episodes = read_clean(spark, "title_episode") \
-        .where(F.col("seasonNumber").isNotNull()) \
+        .where(F.col("seasonNumber") >= 1) \
         .join(series, "parentTconst")
 
     season_sizes = episodes.groupBy("parentTconst", "seasonNumber") \
@@ -37,7 +39,6 @@ def qualifying_series(spark, min_votes=MIN_VOTES):
     per_series = season_sizes.groupBy("parentTconst").agg(
         F.sum(F.when(F.col("episodes") >= MIN_EPISODES, 1).otherwise(0))
         .alias("big_seasons"),
-        F.max("seasonNumber").alias("last_season"),
         F.count("*").alias("seasons"),
     ).where(F.col("big_seasons") >= MIN_SEASONS)
 
@@ -57,10 +58,14 @@ def qualifying_series(spark, min_votes=MIN_VOTES):
         rated_eps
         .withColumn("min_rating", F.min("averageRating").over(per))
         .withColumn("max_rating", F.max("averageRating").over(per))
+        # Last season = last season that has rated episodes, so that an
+        # announced season with no ratings yet does not hide the series.
+        .withColumn("last_season", F.max("seasonNumber").over(per))
     )
     worst = rated_eps.where(F.col("averageRating") == F.col("min_rating"))
     best = rated_eps.where(F.col("averageRating") == F.col("max_rating"))
 
+    last_seasons = rated_eps.select("parentTconst", "last_season").distinct()
     worst_ok = worst.groupBy("parentTconst").agg(
         F.min(F.col("seasonNumber") == F.col("last_season")).alias("ok"),
         F.first("tconst").alias("worst_episode"),
@@ -77,6 +82,7 @@ def qualifying_series(spark, min_votes=MIN_VOTES):
     return (
         worst_ok.join(best_ok, "parentTconst")
         .join(per_series, "parentTconst")
+        .join(last_seasons, "parentTconst")
         .join(series, "parentTconst")
         .select(F.col("parentTconst").alias("series_tconst"),
                 "series_title", "series_start", "seasons", "big_seasons",
