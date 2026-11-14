@@ -51,6 +51,11 @@ def early_peak_actors(spark, min_votes=MIN_VOTES):
         .alias("early_avg_rating"),
         F.round(F.avg(F.when(~F.col("is_early"), F.col("averageRating"))), 2)
         .alias("late_avg_rating"),
+        # Popularity in number of votes, reported for comparison.
+        F.round(F.avg(F.when(F.col("is_early"), F.col("numVotes"))), 0)
+        .alias("early_avg_votes"),
+        F.round(F.avg(F.when(~F.col("is_early"), F.col("numVotes"))), 0)
+        .alias("late_avg_votes"),
         F.max(F.when(F.col("best_rank") == 1,
                      F.struct("primaryTitle", "startYear", "averageRating",
                               "is_early"))).alias("best"),
@@ -66,7 +71,8 @@ def early_peak_actors(spark, min_votes=MIN_VOTES):
         F.col("best.primaryTitle").alias("best_movie"),
         F.col("best.startYear").alias("best_year"),
         F.col("best.averageRating").alias("best_rating"),
-        "early_avg_rating", "late_avg_rating",
+        "early_avg_rating", "late_avg_rating", "early_avg_votes",
+        "late_avg_votes",
         F.round(F.col("early_avg_rating") - F.col("late_avg_rating"), 2)
         .alias("rating_drop"),
     )
@@ -79,7 +85,8 @@ def main():
     total = write_output(result.select(
         "nconst", "primaryName", "first_year", "last_year", "career_years",
         "movies", "best_movie", "best_year", "best_rating",
-        "early_avg_rating", "late_avg_rating", "rating_drop"),
+        "early_avg_rating", "late_avg_rating", "rating_drop",
+        "early_avg_votes", "late_avg_votes"),
         SECTION, "q7_early_peak_actors")
     print(f"{total} actors found")
     result.show(30, truncate=False)
