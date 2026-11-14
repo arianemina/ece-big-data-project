@@ -8,17 +8,24 @@ Pipeline:
       -> stream-static join with the IMDb reference table on the page title
       -> three sinks (Parquet):
          * ``matched_events``  every matching edit (stateless, append), with
-           its ingestion delay and an ``is_late`` flag,
+           its ingestion delay and a ``delayed_beyond_watermark`` flag,
          * ``entity_windows``  edits per IMDb entity per 5-minute event-time
            window, finalised once the 10-minute watermark has passed,
          * ``traffic_windows`` all filtered edits per window (denominator
            used to compute the match rate).
 
 Late data: windows are aggregated on event time with a watermark of
-``WATERMARK``; events later than that are excluded from the aggregates by
-Spark (counted in the ``numRowsDroppedByWatermark`` metric) but are still
-kept in ``matched_events`` with ``is_late = true`` so that they can be
-reconciled in batch afterwards.
+``WATERMARK``. Spark drops a row from the aggregates when its event time is
+older than (max event time seen - WATERMARK); these rows are counted in the
+``numRowsDroppedByWatermark`` metric. Every matched event, dropped or not,
+is still kept in ``matched_events`` so the windows can be reconciled in
+batch afterwards (see ``summarize``). ``delayed_beyond_watermark`` only
+flags events whose ingestion delay (Kafka time - edit time) exceeds the
+watermark; it describes the delay and is not the set of rows Spark drops.
+
+Windows are written in append mode, i.e. only once the watermark has passed
+their end: the windows of the last WINDOW + WATERMARK minutes of a run are
+never emitted by the stream and only appear in the batch reconciliation.
 
 Every micro-batch progress report is appended to
 ``data/streaming/metrics/progress.jsonl``.
@@ -153,7 +160,7 @@ def match_imdb(articles, reference, watermark_seconds):
             "imdb_id", "imdb_name", "entity_type", "match_type",
             "n_candidates",
             lateness.alias("ingestion_delay_s"),
-            (lateness > watermark_seconds).alias("is_late"),
+            (lateness > watermark_seconds).alias("delayed_beyond_watermark"),
         )
     )
 

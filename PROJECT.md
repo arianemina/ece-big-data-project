@@ -148,6 +148,12 @@ article titles are used for matching as well.
    docker compose exec spark python -m imdb.streaming.summarize
    ```
 
+The windowed sinks are written in append mode: a 5-minute window is only
+emitted once the watermark (max event time - 10 minutes) has passed its
+end, so the last ~15 minutes of a run never reach `entity_windows` and
+`traffic_windows`. `summarize` recounts the windows in batch from
+`matched_events` (table `window_reconciliation`) to show them.
+
 Sinks (Parquet): `data/streaming/sinks/` (`matched_events`,
 `entity_windows`, `traffic_windows`); per-batch metrics:
 `data/streaming/metrics/progress.jsonl`. To start again from a clean state,

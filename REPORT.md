@@ -687,7 +687,11 @@ TODO
 
 <!-- RESULTS: finalised_windows -->
 
-### Late events
+### Streamed windows compared with a batch recount
+
+<!-- RESULTS: window_reconciliation -->
+
+### Events delayed beyond the watermark
 
 <!-- RESULTS: late_events -->
 

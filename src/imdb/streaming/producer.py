@@ -82,38 +82,42 @@ def main():
                 if args.duration_minutes else None)
     sent, last_id, backoff = 0, None, 1
     print(f"Producing to {args.topic} on {args.bootstrap} ...")
-    while True:
-        try:
-            for event_id, data in sse_events(C.EVENTSTREAMS_URL, params,
-                                             last_id):
-                last_id = event_id or last_id
-                try:
-                    event = json.loads(data)
-                except ValueError:
-                    continue
-                if event.get("meta", {}).get("domain") == "canary":
-                    continue                    # monitoring events
-                key = f"{event.get('wiki')}:{event.get('title')}"
-                producer.send(args.topic, key=key.encode("utf-8"),
-                              value=data.encode("utf-8"))
-                sent += 1
-                backoff = 1
-                if sent % 1000 == 0:
-                    print(f"  {sent:,} events sent")
-                if (args.max_events and sent >= args.max_events) or (
-                        deadline and time.time() > deadline):
-                    raise Done
-            # The server closed the stream: reconnect from last_id.
-        except Done:
-            break
-        except (requests.RequestException, ValueError) as exc:
-            print(f"  stream interrupted ({exc}); reconnecting in "
-                  f"{backoff}s")
-            time.sleep(backoff)
-            backoff = min(backoff * 2, 60)
-        if last_id:
-            params.pop("since", None)   # resume with Last-Event-ID instead
-    producer.flush()
+    try:
+        while True:
+            try:
+                for event_id, data in sse_events(C.EVENTSTREAMS_URL, params,
+                                                 last_id):
+                    last_id = event_id or last_id
+                    try:
+                        event = json.loads(data)
+                    except ValueError:
+                        continue
+                    if event.get("meta", {}).get("domain") == "canary":
+                        continue                    # monitoring events
+                    key = f"{event.get('wiki')}:{event.get('title')}"
+                    producer.send(args.topic, key=key.encode("utf-8"),
+                                  value=data.encode("utf-8"))
+                    sent += 1
+                    backoff = 1
+                    if sent % 1000 == 0:
+                        print(f"  {sent:,} events sent")
+                    if (args.max_events and sent >= args.max_events) or (
+                            deadline and time.time() > deadline):
+                        raise Done
+                # The server closed the stream: reconnect from last_id.
+            except Done:
+                break
+            except (requests.RequestException, ValueError) as exc:
+                print(f"  stream interrupted ({exc}); reconnecting in "
+                      f"{backoff}s")
+                time.sleep(backoff)
+                backoff = min(backoff * 2, 60)
+            if last_id:
+                params.pop("since", None)   # resume with Last-Event-ID instead
+    finally:
+        # Deliver buffered messages even if Kafka or the stream fails.
+        producer.flush()
+        producer.close()
     print(f"Done: {sent:,} events sent to Kafka")
 
 

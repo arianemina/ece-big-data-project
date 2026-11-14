@@ -49,8 +49,9 @@ def key(col):
 
 
 def explode_keys(variants):
-    """One normalised match key per variant."""
-    return F.explode(F.array_distinct(F.transform(variants, key)))
+    """One normalised match key per (non-null) variant."""
+    return F.explode(F.array_distinct(F.filter(
+        F.transform(variants, key), lambda k: k.isNotNull())))
 
 
 def title_keys(basics, ratings, min_votes):
@@ -60,17 +61,21 @@ def title_keys(basics, ratings, min_votes):
     )
     year = F.col("startYear").cast("string")
     is_film = F.col("titleType").isin(FILM_TYPES)
+    # A one-word title ("Up", "Heat", "Chicago") usually names another
+    # article: keep the bare form only for titles of two words or more and
+    # rely on the disambiguated forms ("Heat (1995 film)") otherwise.
+    bare = F.when(F.col("primaryTitle").contains(" "), F.col("primaryTitle"))
     variants = F.when(
         is_film,
         F.array(
-            F.col("primaryTitle"),
+            bare,
             F.concat_ws("", "primaryTitle", F.lit(" (film)")),
             F.concat_ws("", "primaryTitle", F.lit(" ("), year,
                         F.lit(" film)")),
         ),
     ).otherwise(
         F.array(
-            F.col("primaryTitle"),
+            bare,
             F.concat_ws("", "primaryTitle", F.lit(" (TV series)")),
             F.concat_ws("", "primaryTitle", F.lit(" ("), year,
                         F.lit(" TV series)")),
@@ -179,6 +184,8 @@ def main():
     w_all = Window.partitionBy("match_key")
     reference = (
         candidates.dropDuplicates(["match_key", "imdb_id"])
+        # True when the page title is the bare IMDb name (no "(film)", ...)
+        .withColumn("bare_key", F.col("match_key") == key("imdb_name"))
         .filter(F.length("match_key") >= 3)
         .withColumn("n_candidates", F.count("*").over(w_all))
         .withColumn("_rn", F.row_number().over(w_rank))

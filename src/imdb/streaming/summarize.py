@@ -57,6 +57,33 @@ def progress_metrics(path):
     return rows
 
 
+def window_reconciliation(matched, windows):
+    """Compare the streamed windows with a batch recount of the raw sink.
+
+    The batch recount uses every matched event, including the ones Spark
+    dropped because they were behind the watermark and the ones of the
+    windows that were still open when the job stopped.
+    """
+    batch = (
+        matched.groupBy(F.window("event_time", C.WINDOW))
+        .agg(F.count("*").alias("batch_edits"),
+             F.countDistinct("imdb_id").alias("batch_entities"))
+        .select(F.col("window.start").alias("window_start"),
+                F.col("window.end").alias("window_end"),
+                "batch_edits", "batch_entities")
+    )
+    streamed = windows.groupBy("window_start", "window_end").agg(
+        F.sum("edits").alias("streamed_edits"))
+    return (
+        batch.join(streamed, ["window_start", "window_end"], "full")
+        .withColumn("emitted_by_stream", F.col("streamed_edits").isNotNull())
+        .withColumn("missing_in_stream",
+                    F.col("batch_edits")
+                    - F.coalesce("streamed_edits", F.lit(0)))
+        .orderBy("window_start")
+    )
+
+
 def main():
     spark = get_spark("streaming-summary")
     matched = spark.read.parquet(C.MATCHED_EVENTS)
@@ -68,7 +95,8 @@ def main():
         F.max("event_time").alias("last_event"),
         F.count("*").alias("matched_events"),
         F.countDistinct("imdb_id").alias("distinct_imdb_entities"),
-        F.sum(F.col("is_late").cast("int")).alias("late_events"),
+        F.sum(F.col("delayed_beyond_watermark").cast("int"))
+        .alias("delayed_beyond_watermark"),
         F.round(F.avg("ingestion_delay_s"), 1).alias("avg_delay_s"),
         F.max("ingestion_delay_s").alias("max_delay_s"),
     ), C.SECTION, "overview")
@@ -98,8 +126,11 @@ def main():
         .orderBy("window_start"),
         C.SECTION, "finalised_windows")
 
+    write_output(window_reconciliation(matched, windows), C.SECTION,
+                 "window_reconciliation", preview_rows=40)
+
     write_output(
-        matched.where("is_late")
+        matched.where("delayed_beyond_watermark")
         .select("event_time", "kafka_time", "ingestion_delay_s", "title",
                 "imdb_id", "match_type")
         .orderBy("event_time"),
@@ -107,7 +138,8 @@ def main():
 
     write_output(
         matched.select("event_time", "title", "imdb_id", "entity_type",
-                       "match_type", "user", "bytes_delta", "is_late")
+                       "match_type", "user", "bytes_delta",
+                       "delayed_beyond_watermark")
         .orderBy("event_time"),
         C.SECTION, "matched_events", preview_rows=30)
 

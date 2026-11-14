@@ -11,15 +11,19 @@ BASICS = ("tconst STRING, titleType STRING, primaryTitle STRING, "
 def test_title_and_person_keys(spark):
     basics = spark.createDataFrame(
         [("tt1", "movie", "Inception", 2010),
+         ("tt4", "movie", "The Matrix", 1999),
          ("tt2", "tvSeries", "Dark", 2017),
          ("tt3", "movie", "Unknown", 2001)], BASICS)
     ratings = spark.createDataFrame(
-        [("tt1", 2500000), ("tt2", 500000), ("tt3", 10)],
+        [("tt1", 2500000), ("tt2", 500000), ("tt3", 10), ("tt4", 2200000)],
         "tconst STRING, numVotes INT")
     keys, titles = build_reference.title_keys(basics, ratings, 5000)
     got = {r.match_key for r in keys.collect()}
-    assert {"inception", "inception (film)", "inception (2010 film)",
-            "dark", "dark (tv series)", "dark (2017 tv series)"} <= got
+    assert {"inception (film)", "inception (2010 film)",
+            "dark (tv series)", "dark (2017 tv series)"} <= got
+    # one-word titles are only matched with a disambiguation suffix
+    assert "inception" not in got and "dark" not in got
+    assert "the matrix" in got                  # two words: bare title kept
     assert not any(k.startswith("unknown") for k in got)  # too few votes
 
     principals = spark.createDataFrame(
@@ -68,8 +72,27 @@ def test_filter_and_match(spark):
     matched = stream_processor.match_imdb(articles, reference, 600) \
         .orderBy("event_time").collect()
     assert [m.imdb_id for m in matched] == ["tt1", "tt1"]
-    assert [m.is_late for m in matched] == [True, False]   # 1030 s vs 30 s
+    # ingestion delays of 1030 s and 30 s against a 600 s watermark
+    assert [m.delayed_beyond_watermark for m in matched] == [True, False]
     assert matched[1].bytes_delta == 15
+
+
+def test_window_reconciliation_counts_events_missing_in_stream(spark):
+    from imdb.streaming import summarize
+    matched = spark.createDataFrame(
+        [("2026-11-12 10:01:00", "tt1"), ("2026-11-12 10:02:00", "tt2"),
+         ("2026-11-12 10:07:00", "tt1")],
+        "event_time STRING, imdb_id STRING",
+    ).withColumn("event_time", F.to_timestamp("event_time"))
+    windows = spark.createDataFrame(
+        [("2026-11-12 10:00:00", "2026-11-12 10:05:00", 1)],
+        "window_start STRING, window_end STRING, edits LONG",
+    ).select(F.to_timestamp("window_start").alias("window_start"),
+             F.to_timestamp("window_end").alias("window_end"), "edits")
+    rows = summarize.window_reconciliation(matched, windows).collect()
+    assert [(r.batch_edits, r.streamed_edits, r.missing_in_stream,
+             r.emitted_by_stream) for r in rows] == [
+        (2, 1, 1, True), (1, None, 1, False)]
 
 
 def test_to_seconds():
