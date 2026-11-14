@@ -117,3 +117,14 @@ def test_lineage_licenses_per_source(spark):
     assert rows[0].lineage.wikidata_license == "CC0 1.0"
     assert rows[1].lineage.license is None          # no article fetched
     assert rows[1].lineage.wikidata_license == "CC0 1.0"
+
+
+def test_unknown_wikidata_dates_become_null(spark):
+    df = spark.createDataFrame(
+        [("1942-07-13T00:00:00Z",),
+         ("http://www.wikidata.org/.well-known/genid/f0964aa7",), (None,)],
+        "birth_date STRING")
+    got = [r.d for r in df.select(
+        build_enriched.parse_wikidata_date("birth_date").alias("d"))
+        .collect()]
+    assert str(got[0]) == "1942-07-13" and got[1] is None and got[2] is None

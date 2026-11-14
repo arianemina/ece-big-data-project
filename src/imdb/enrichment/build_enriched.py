@@ -130,8 +130,14 @@ def clean_text(col):
 
 
 def parse_wikidata_date(col):
-    """Wikidata dates look like '1946-07-06T00:00:00Z'."""
-    return F.to_date(F.substring(col, 1, 10), "yyyy-MM-dd")
+    """Wikidata dates look like '1946-07-06T00:00:00Z'.
+
+    "Unknown value" statements come back from SPARQL as a blank node URI
+    (http://www.wikidata.org/.well-known/genid/...); they become null.
+    """
+    col = F.col(col) if isinstance(col, str) else col
+    return F.when(col.rlike(r"^\d{4}-\d{2}-\d{2}"),
+                  F.to_date(F.substring(col, 1, 10), "yyyy-MM-dd"))
 
 
 def build_films(spark, links, pages):
