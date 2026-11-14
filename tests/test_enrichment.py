@@ -68,6 +68,16 @@ def test_plot_section_and_lead_extraction(spark):
     assert out[1].lead.startswith("No sections here")
 
 
+def test_pronunciation_leftovers_are_removed(spark):
+    df = spark.createDataFrame(
+        [("Peter Hayden Dinklage (; born June 11, 1969) is an American actor "
+          "and producer ().",)], "t STRING")
+    got = df.select(build_enriched.clean_text(F.col("t")).alias("c")) \
+        .first().c
+    assert got == ("Peter Hayden Dinklage (born June 11, 1969) is an American "
+                   "actor and producer.")
+
+
 def test_latest_record_per_id_wins(spark):
     df = spark.createDataFrame(
         [("tt1", "2026-01-01T00:00:00+00:00", "old"),

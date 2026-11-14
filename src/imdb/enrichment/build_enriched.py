@@ -120,10 +120,15 @@ def clean_text(col):
 
     - remove sub-heading markers (=== Heading ===),
     - remove leftover bracketed reference markers ([1], [note 2], ...),
+    - remove what is left of stripped pronunciations ("(; born", "()"),
     - collapse runs of whitespace and trim.
     """
     col = F.regexp_replace(col, r"(?m)^=+ .*? =+\s*$", " ")
     col = F.regexp_replace(col, r"\[(?:\d+|note \d+|[a-z])\]", "")
+    # pronunciations removed by the plain-text extract leave "(; born ..."
+    # or "()" behind
+    col = F.regexp_replace(col, r"\(\s*[;,]\s*", "(")
+    col = F.regexp_replace(col, r"\s*\(\s*\)", "")
     col = F.regexp_replace(col, r"\s+", " ")
     col = F.trim(col)
     return F.when(F.length(col) >= MIN_TEXT_LENGTH, col)
