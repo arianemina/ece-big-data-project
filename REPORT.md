@@ -671,7 +671,142 @@ TODO (written by the team)
 
 ## Data enrichment
 
-TODO
+### Selected films and principals
+
+<!-- RESULTS: targets_summary -->
+
+**targets_summary**
+
+| measure | value |
+| --- | --- |
+| (film, genre, year) rows | 9832 |
+| distinct films | 6821 |
+| (film, principal) rows | 20431 |
+| distinct people | 10479 |
+
+_4 rows in total._
+
+### Coverage of the enrichment
+
+<!-- RESULTS: coverage -->
+
+**coverage**
+
+| dataset | rows | enriched | from_plot_section | pct_enriched |
+| --- | --- | --- | --- | --- |
+| films (year, genre, rank) | 9832 | 9331 | 8903 | 94.90 |
+| principals (film, person) | 20431 | 17738 |  | 86.80 |
+
+_2 rows in total._
+
+### Notes on missing information
+
+<!-- RESULTS: film_notes, principal_notes -->
+
+**film_notes**
+
+| enrichment_note | count |
+| --- | --- |
+| none (fully enriched) | 8903 |
+| Article has no plot/synopsis section; lead section used | 428 |
+| No English Wikipedia article linked to the Wikidata item | 253 |
+| No Wikidata item found for this IMDb ID | 247 |
+| Article has no usable synopsis text | 1 |
+
+_5 rows in total._
+
+**principal_notes**
+
+| enrichment_note | count |
+| --- | --- |
+| none (fully enriched) | 17738 |
+| No Wikidata item found for this IMDb ID | 1804 |
+| No English Wikipedia article linked to the Wikidata item | 879 |
+| Article has no usable lead section | 10 |
+
+_4 rows in total._
+
+### Sample of enriched records
+
+<!-- RESULTS: films_sample, principals_sample -->
+
+**films_sample**
+
+| year | genre | rank | tconst | primaryTitle | synopsis_source | synopsis_preview | source_url | enrichment_note |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1980 | Action | 1 | tt0081573 | Superman II | plot_section | Before the destruction of Krypton, the criminals General Zod, Ursa and Non are sentenced to banishment into the Phantom Zone. Years later, the Phantom Zone is shattered near Earth by the shockwave of ... | https://en.wikipedia.org/w/index.php?title=Superman_II&oldid=1383900393 |  |
+| 1980 | Action | 2 | tt0080745 | Flash Gordon | plot_section | To relieve his boredom, Emperor Ming the Merciless of the planet Mongo begins Earth's destruction by remotely causing natural disasters. On Earth, football star Gregory "Flash" Gordon boards a small p... | https://en.wikipedia.org/w/index.php?title=Flash_Gordon_%28film%29&oldid=1385236838 |  |
+| 1980 | Action | 3 | tt0080736 | The Final Countdown | plot_section | In 1980, the nuclear-powered aircraft carrier USS Nimitz departs Naval Station Pearl Harbor for exercises in the mid-Pacific Ocean. A civilian systems analyst for Tideman Industries named Warren Lasky... | https://en.wikipedia.org/w/index.php?title=The_Final_Countdown_%28film%29&oldid=1380482840 |  |
+| 1980 | Adventure | 1 | tt0080684 | Star Wars: Episode V - The Empire Strikes Back | plot_section | Three years after the destruction of the Death Star, the Imperial fleet, led by Darth Vader, dispatches probe droids across the galaxy in search of the Rebel Alliance. One probe locates the Rebel base... | https://en.wikipedia.org/w/index.php?title=The_Empire_Strikes_Back&oldid=1384987356 |  |
+| 1980 | Adventure | 2 | tt0080455 | The Blues Brothers | plot_section | Jake Blues, a blues vocalist and petty criminal, is paroled from Joliet Prison after serving three years of a five-year sentence for armed robbery and is picked up by his brother Elwood in a battered ... | https://en.wikipedia.org/w/index.php?title=The_Blues_Brothers_%28film%29&oldid=1385022778 |  |
+| 1980 | Adventure | 3 | tt0081573 | Superman II | plot_section | Before the destruction of Krypton, the criminals General Zod, Ursa and Non are sentenced to banishment into the Phantom Zone. Years later, the Phantom Zone is shattered near Earth by the shockwave of ... | https://en.wikipedia.org/w/index.php?title=Superman_II&oldid=1383900393 |  |
+| 1980 | Animation | 1 | tt0079820 | The King and the Mockingbird | plot_section | The huge kingdom of Takicardia is ruled by a king under the unwieldy title of Charles V + III = VIII + VIII = XVI. He is a heartless ruler, hated by his people as much as he hates them. The King is fo... | https://en.wikipedia.org/w/index.php?title=The_King_and_the_Mockingbird&oldid=1374618581 |  |
+| 1980 | Animation | 2 | tt0080461 | Bon Voyage, Charlie Brown (and Don't Come Back!!) | plot_section | At Charlie Brown's school, Linus Van Pelt introduces to his class two French students, Babette and Jacques, who will be spending two weeks there to get accustomed to the United States. In exchange, Ch... | https://en.wikipedia.org/w/index.php?title=Bon_Voyage%2C_Charlie_Brown_%28and_Don%27t_Come_Back%21%21%29&oldid=1383439812 |  |
+| 1980 | Animation | 3 | tt0078780 | Animalympics | plot_section | The film is a series of vignettes presented as the broadcast of the first animal Olympic Games through the fictional ZOO television network. The Games combine summer and winter Olympic events. The eve... | https://en.wikipedia.org/w/index.php?title=Animalympics&oldid=1372144226 |  |
+| 1980 | Biography | 1 | tt0081398 | Raging Bull | plot_section | In 1941, Jake LaMotta is a young up-and-coming middleweight boxer who suffers his first loss to Jimmy Reeves after a controversial decision. Jake's brother Joey discusses a potential shot for the midd... | https://en.wikipedia.org/w/index.php?title=Raging_Bull&oldid=1380652135 |  |
+| 1980 | Biography | 2 | tt0080678 | The Elephant Man | plot_section | Frederick Treves, a surgeon at the London Hospital, finds John Merrick in a Victorian freak show in London's East End, where he is kept by Mr. Bytes, the brutish ringmaster. Merrick's head is kept hoo... | https://en.wikipedia.org/w/index.php?title=The_Elephant_Man_%281980_film%29&oldid=1381585783 |  |
+| 1980 | Biography | 3 | tt0080549 | Coal Miner's Daughter | plot_section | In 1945, 13-year-old Loretta Webb is one of eight children of Ted Webb, a Van Lear coal miner raising a family with his wife in the midst of grinding poverty in Butcher Hollow, Kentucky (pronounced by... | https://en.wikipedia.org/w/index.php?title=Coal_Miner%27s_Daughter_%28film%29&oldid=1383373870 |  |
+| 1980 | Comedy | 1 | tt0080339 | Airplane! | plot_section | Ex–fighter pilot Ted Striker is a traumatized war veteran turned taxi driver. Because of his pathological fear of flying and subsequent "drinking problem"—he splashes beverages anywhere but into his m... | https://en.wikipedia.org/w/index.php?title=Airplane%21&oldid=1385188942 |  |
+| 1980 | Comedy | 2 | tt0080455 | The Blues Brothers | plot_section | Jake Blues, a blues vocalist and petty criminal, is paroled from Joliet Prison after serving three years of a five-year sentence for armed robbery and is picked up by his brother Elwood in a battered ... | https://en.wikipedia.org/w/index.php?title=The_Blues_Brothers_%28film%29&oldid=1385022778 |  |
+| 1980 | Comedy | 3 | tt0080487 | Caddyshack | plot_section | Teenager Danny Noonan is uncertain about his future, unsure whether to attend college but worried about becoming trapped in a menial job with few prospects. He works as a caddie at the exclusive Bushw... | https://en.wikipedia.org/w/index.php?title=Caddyshack&oldid=1385138051 |  |
+| 1980 | Crime | 1 | tt0080455 | The Blues Brothers | plot_section | Jake Blues, a blues vocalist and petty criminal, is paroled from Joliet Prison after serving three years of a five-year sentence for armed robbery and is picked up by his brother Elwood in a battered ... | https://en.wikipedia.org/w/index.php?title=The_Blues_Brothers_%28film%29&oldid=1385022778 |  |
+| 1980 | Crime | 2 | tt0080661 | Dressed to Kill | plot_section | Sexually frustrated housewife Kate Miller is attending therapy sessions with New York City psychiatrist Dr. Robert Elliott. During an appointment, Kate attempts to seduce him, but Elliott rejects her ... | https://en.wikipedia.org/w/index.php?title=Dressed_to_Kill_%281980_film%29&oldid=1383365391 |  |
+| 1980 | Crime | 3 | tt0081562 | Stir Crazy | plot_section | In New York City, aspiring actor Harry Monroe is fired from his job as a waiter when cooks accidentally use his stash of marijuana as oregano at a dinner party. His friend, aspiring playwright Skip Do... | https://en.wikipedia.org/w/index.php?title=Stir_Crazy_%28film%29&oldid=1381466942 |  |
+| 1980 | Documentary | 1 | tt0080813 | The Great Rock 'n' Roll Swindle | plot_section | Guitarist Steve Jones plays a shady private detective who through a series of set piece acts uncovers the truth about the band. Drummer Paul Cook and bass guitarist Sid Vicious play smaller roles, and... | https://en.wikipedia.org/w/index.php?title=The_Great_Rock_%27n%27_Roll_Swindle&oldid=1375407111 |  |
+| 1980 | Documentary | 2 | tt0081055 | Lightning Over Water | plot_section | Lightning Over Water is a collaboration between Wenders and Ray to document Ray's last days due to terminal cancer in 1979. The film is partially an homage to Ray, who had a strong influence on Wender... | https://en.wikipedia.org/w/index.php?title=Lightning_Over_Water&oldid=1341592825 |  |
+| 1980 | Documentary | 3 | tt0080321 | AC/DC: Let There Be Rock | lead_section | AC/DC: Let There Be Rock is a 1980 concert film featuring the Australian hard rock band AC/DC, released theatrically in September 1980 (and AC/DC's native Australia on New Year's Eve, 1981) and on vid... | https://en.wikipedia.org/w/index.php?title=AC/DC%3A_Let_There_Be_Rock&oldid=1365547584 | Article has no plot/synopsis section; lead section used |
+| 1980 | Drama | 1 | tt0081505 | The Shining | plot_section | Jack Torrance takes a caretaker position to look after the remote Overlook Hotel in the Colorado Rocky Mountains while it is closed for the winter. On arrival, hotel manager Stuart Ullman informs Jack... | https://en.wikipedia.org/w/index.php?title=The_Shining_%28film%29&oldid=1383904140 |  |
+| 1980 | Drama | 2 | tt0081398 | Raging Bull | plot_section | In 1941, Jake LaMotta is a young up-and-coming middleweight boxer who suffers his first loss to Jimmy Reeves after a controversial decision. Jake's brother Joey discusses a potential shot for the midd... | https://en.wikipedia.org/w/index.php?title=Raging_Bull&oldid=1380652135 |  |
+| 1980 | Drama | 3 | tt0080678 | The Elephant Man | plot_section | Frederick Treves, a surgeon at the London Hospital, finds John Merrick in a Victorian freak show in London's East End, where he is kept by Mr. Bytes, the brutish ringmaster. Merrick's head is kept hoo... | https://en.wikipedia.org/w/index.php?title=The_Elephant_Man_%281980_film%29&oldid=1381585783 |  |
+| 1980 | Family | 1 | tt0081353 | Popeye | plot_section | Popeye, a gruff but good-hearted sailor, arrives at the small coastal town of Sweethaven while searching for his missing father. He rents a room at the Oyl family's boarding house, where the Oyls plan... | https://en.wikipedia.org/w/index.php?title=Popeye_%28film%29&oldid=1384018450 |  |
+| 1980 | Family | 2 | tt0081207 | My Bodyguard | plot_section | Clifford Peache lives in an upscale Chicago luxury hotel with his father, the hotel manager, and his grandmother. He is new to Fleer High School and arrives each day in a hotel limousine. Clifford is ... | https://en.wikipedia.org/w/index.php?title=My_Bodyguard&oldid=1382660627 |  |
+| 1980 | Family | 3 | tt0081738 | The Watcher in the Woods | plot_section | Americans Helen and Paul Curtis and their daughters, Jan and Ellie, move into a manor in rural England. Mrs. Aylwood, the owner of the residence who now lives in the guest house next door, notices tha... | https://en.wikipedia.org/w/index.php?title=The_Watcher_in_the_Woods_%281980_film%29&oldid=1375242708 |  |
+| 1980 | Fantasy | 1 | tt0080684 | Star Wars: Episode V - The Empire Strikes Back | plot_section | Three years after the destruction of the Death Star, the Imperial fleet, led by Darth Vader, dispatches probe droids across the galaxy in search of the Rebel Alliance. One probe locates the Rebel base... | https://en.wikipedia.org/w/index.php?title=The_Empire_Strikes_Back&oldid=1384987356 |  |
+| 1980 | Fantasy | 2 | tt0081534 | Somewhere in Time | plot_section | In 1972, college theater student Richard Collier celebrates the debut of his new play. An elderly woman approaches him, places an ornate gold pocket watch in his hand, and pleads, "Come back to me." E... | https://en.wikipedia.org/w/index.php?title=Somewhere_in_Time_%28film%29&oldid=1383819270 |  |
+| 1980 | Fantasy | 3 | tt0081777 | Xanadu | plot_section | Sonny Malone, a struggling self-employed illustrator residing in Los Angeles, has failed to find passion in his art. He tears up one of his sketches and tosses the pieces out his studio window; the wi... | https://en.wikipedia.org/w/index.php?title=Xanadu_%28film%29&oldid=1384969979 |  |
+
+_3026 rows in total, first 30 shown._
+
+**principals_sample**
+
+| tconst | principal_rank | nconst | primaryName | category | birth_date | birth_place | biography_preview | source_url | enrichment_note |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| tt9893250 | 1 | nm0683253 | Rosamund Pike | actress | 1979-01-27 | Hammersmith | Rosamund Mary Ellen Pike (born 1979) is a British actress and producer. Known for her portrayals of complex and morally ambiguous women in independent cinema and psychological thrillers, her accolades... | https://en.wikipedia.org/w/index.php?title=Rosamund_Pike&oldid=1381714914 |  |
+| tt9893250 | 2 | nm0227759 | Peter Dinklage | actor | 1969-06-11 | Morristown | Peter Hayden Dinklage (born June 11, 1969) is an American actor. Portraying Tyrion Lannister on the HBO television series Game of Thrones (2011–2019), he won the Primetime Emmy Award for Outstanding S... | https://en.wikipedia.org/w/index.php?title=Peter_Dinklage&oldid=1384730402 |  |
+| tt9893250 | 3 | nm2555462 | Eiza González | actress | 1990-01-30 | Mexico City | Eiza González Reyna (born 30 January 1990) is a Mexican actress and singer. She gained popularity for starring in the Nickelodeon teen sitcom Sueña conmigo (2010–2011). As a singer, she released the a... | https://en.wikipedia.org/w/index.php?title=Eiza_Gonz%C3%A1lez&oldid=1385056542 |  |
+| tt9883832 | 1 | nm0000309 | David Bowie | archive_footage | 1947-01-08 | Brixton | David Robert Jones (8 January 1947 – 10 January 2016), known as David Bowie, was an English singer, songwriter and actor. Regarded as among the most influential musicians of the 20th century, he was k... | https://en.wikipedia.org/w/index.php?title=David_Bowie&oldid=1384912277 |  |
+| tt9883832 | 2 | nm0092783 | Trevor Bolder | archive_footage | 1950-06-09 | Kingston upon Hull | Trevor Bolder (9 June 1950 – 21 May 2013) was an English rock musician, songwriter and record producer. He is best known for his long association with Uriah Heep and his tenure with the Spiders from M... | https://en.wikipedia.org/w/index.php?title=Trevor_Bolder&oldid=1375231962 |  |
+| tt9883832 | 3 | nm5123954 | Ken Fordham | archive_footage |  |  |  |  | No Wikidata item found for this IMDb ID |
+| tt9873892 | 1 | nm3915784 | John Boyega | actor | 1992-03-17 | London | John Adedayo Bamidele Adegboyega (born 17 March 1992), known professionally as John Boyega, is an English actor and producer. He first gained recognition in Britain for his role as a teenage gang lead... | https://en.wikipedia.org/w/index.php?title=John_Boyega&oldid=1383093605 |  |
+| tt9873892 | 2 | nm0004937 | Jamie Foxx | actor | 1967-12-13 | Terrell | Jamie Foxx (born Eric Marlon Bishop, December 13, 1967), is an American actor, comedian, singer, and film producer. He gained his career breakthrough as a featured player in the sketch comedy show In ... | https://en.wikipedia.org/w/index.php?title=Jamie_Foxx&oldid=1383093860 |  |
+| tt9873892 | 3 | nm3500582 | Teyonah Parris | actress | 1987-09-22 | Hopkins | Teyonah Parris ( tee-ON-ə; born September 22, 1987) is an American actress. A graduate of Juilliard School, she began acting in 2010. Her first prominent roles were in the drama series Mad Men (2012–2... | https://en.wikipedia.org/w/index.php?title=Teyonah_Parris&oldid=1380124667 |  |
+| tt9866072 | 1 | nm0731075 | Emma Roberts | actress | 1991-02-10 | Rhinebeck | Emma Rose Roberts (born February 10, 1991) is an American actress. Known for her performances spanning multiple genres of film and television, her work in the horror and thriller genres have establish... | https://en.wikipedia.org/w/index.php?title=Emma_Roberts&oldid=1383040790 |  |
+| tt9866072 | 2 | nm3478396 | Luke Bracey | actor | 1989-04-26 | Sydney | Luke Bracey (born 26 April 1989) is an Australian actor. He is known for his work in films such as Monte Carlo (2011), G.I. Joe: Retaliation (2013), The November Man (2014), Point Break (2015), Hacksa... | https://en.wikipedia.org/w/index.php?title=Luke_Bracey&oldid=1381709140 |  |
+| tt9866072 | 3 | nm0155693 | Kristin Chenoweth | actress | 1968-07-24 | Broken Arrow | Kristin Dawn Chenoweth (born Kristi Dawn Chenoweth; July 24, 1968) is an American actress and singer, with credits in musical theatre, film, and television. In 1999, she won a Tony Award for Best Feat... | https://en.wikipedia.org/w/index.php?title=Kristin_Chenoweth&oldid=1381361302 |  |
+| tt9820556 | 1 | nm4181215 | Cody Kearsley | actor | 1991-03-10 | British Columbia | Cody Kearsley is a Canadian actor, best known for his portrayal of Moose Mason in the CW series Riverdale and Turbo Pokaski in the Netflix series Daybreak.... | https://en.wikipedia.org/w/index.php?title=Cody_Kearsley&oldid=1379373071 |  |
+| tt9820556 | 2 | nm0000246 | Bruce Willis | actor | 1955-03-19 | Idar-Oberstein | Walter Bruce Willis (born March 19, 1955) is a retired American actor. Widely recognized as a Hollywood icon of the action genre, he first achieved fame with a leading role on the comedy-drama series ... | https://en.wikipedia.org/w/index.php?title=Bruce_Willis&oldid=1385136338 |  |
+| tt9820556 | 3 | nm0629697 | Rachel Nichols | actress | 1980-01-08 | Augusta | Rachel Nichols (born 1979 or 1980) is an American actress and model. Nichols began modeling while attending Columbia University in New York City in the late 1990s, and transitioned into acting by the ... | https://en.wikipedia.org/w/index.php?title=Rachel_Nichols_%28actress%29&oldid=1373509917 |  |
+| tt9784798 | 1 | nm3147751 | LaKeith Stanfield | actor | 1991-08-12 | San Bernardino | LaKeith Lee Stanfield (born August 12, 1991) is an American actor and musician. He made his feature film debut in Short Term 12 (2013), for which he was nominated for an Independent Spirit Award. He r... | https://en.wikipedia.org/w/index.php?title=LaKeith_Stanfield&oldid=1382156065 |  |
+| tt9784798 | 2 | nm2257207 | Daniel Kaluuya | actor | 1989-02-24 | Camden Town | Daniel Kaluuya (born 24 February 1989) is an English actor. His work encompasses both screen and stage, and his accolades include an Academy Award, two BAFTAs, two Actor Awards, and a Golden Globe, in... | https://en.wikipedia.org/w/index.php?title=Daniel_Kaluuya&oldid=1383094376 |  |
+| tt9784798 | 3 | nm0687146 | Jesse Plemons | actor | 1988-04-02 | Dallas | Jesse Plemons (born April 2, 1988) is an American actor. Known for his work with auteurs and portrayal of eccentric characters, his accolades include a Cannes Film Festival Award for Best Actor and no... | https://en.wikipedia.org/w/index.php?title=Jesse_Plemons&oldid=1383733732 |  |
+| tt9779516 | 1 | nm6216001 | KJ Apa | actor | 1997-06-17 | Auckland | Keneti James Fitzgerald "KJ" Apa (born 17 June 1997) is a New Zealand actor and singer. He gained recognition for playing Kane Jenkins in the New Zealand soap opera Shortland Street (2013–2015) and Ar... | https://en.wikipedia.org/w/index.php?title=KJ_Apa&oldid=1384584244 |  |
+| tt9779516 | 2 | nm1429380 | Britt Robertson | actress | 1990-04-18 | Charlotte | Brittany Leanna Robertson-Floyd (née Robertson; born April 18, 1990), known professionally as Britt Robertson, is an American actress. Raised in Greenville, South Carolina, at age 14, Robertson moved ... | https://en.wikipedia.org/w/index.php?title=Britt_Robertson&oldid=1384927757 |  |
+| tt9779516 | 3 | nm1452155 | Nathan Parsons | actor | 1988-06-16 | Adelaide | Nathan Dean Parsons (born June 16, 1988), also known as Nathan Dean, is an American actor known for his work in daytime television on the ABC daytime soap opera General Hospital as the character of Et... | https://en.wikipedia.org/w/index.php?title=Nathan_Parsons&oldid=1380261717 |  |
+| tt9777666 | 1 | nm0695435 | Chris Pratt | actor | 1979-06-21 | Virginia | Christopher Michael Pratt (born June 21, 1979) is an American actor and producer. His films as a leading actor have grossed over $15.2 billion worldwide, making him one of the highest-grossing film st... | https://en.wikipedia.org/w/index.php?title=Chris_Pratt&oldid=1382889282 |  |
+| tt9777666 | 2 | nm2088803 | Yvonne Strahovski | actress | 1982-07-30 | Werrington Downs | Yvonne Jaqueline Strzechowski (born 30 July 1982), known professionally as Yvonne Strahovski, is an Australian actress. She is known for her roles as Sarah Walker in the spy comedy drama series Chuck ... | https://en.wikipedia.org/w/index.php?title=Yvonne_Strahovski&oldid=1384089871 |  |
+| tt9777666 | 3 | nm0799777 | J.K. Simmons | actor | 1955-01-09 | Detroit | Jonathan Kimble Simmons (born January 9, 1955) is an American actor. Considered among the most established and enduring character actors of his generation, he has amassed over 200 screen and stage cre... | https://en.wikipedia.org/w/index.php?title=J._K._Simmons&oldid=1384932189 |  |
+| tt9777644 | 1 | nm0005148 | Delroy Lindo | actor | 1952-11-18 |  | Delroy George Lindo (born 18 November 1952) is an English-American actor. Starting his career in the 1975 stage production of Of Mice and Men, he later earned a nomination for the Tony Award for Best ... | https://en.wikipedia.org/w/index.php?title=Delroy_Lindo&oldid=1384405312 |  |
+| tt9777644 | 2 | nm3718007 | Jonathan Majors | actor | 1989-09-07 | Lompoc | Jonathan Michael Majors (born September 7, 1989) is an American actor. A graduate of the Yale School of Drama, Majors rose to prominence for starring in the drama films The Last Black Man in San Franc... | https://en.wikipedia.org/w/index.php?title=Jonathan_Majors&oldid=1382719105 |  |
+| tt9777644 | 3 | nm0676370 | Clarke Peters | actor | 1952-04-07 | New York City | Peter Clarke (born April 7, 1952), known professionally as Clarke Peters, is an American actor, writer, and director, who has spent much of his adult life in the United Kingdom. He is best known for h... | https://en.wikipedia.org/w/index.php?title=Clarke_Peters&oldid=1383899322 |  |
+| tt9770150 | 1 | nm0000531 | Frances McDormand | actress | 1957-06-23 | Gibson City | Frances Louise McDormand (born Cynthia Ann Smith; June 23, 1957) is an American actress and film producer. In a career spanning over four decades, McDormand has received numerous accolades, including ... | https://en.wikipedia.org/w/index.php?title=Frances_McDormand&oldid=1383092920 |  |
+| tt9770150 | 2 | nm0000657 | David Strathairn | actor | 1949-01-26 | San Francisco | David Russell Strathairn (born January 26, 1949) is an American actor. Known for his leading roles on stage and screen, he has often portrayed historical figures including Edward R. Murrow, J. Robert ... | https://en.wikipedia.org/w/index.php?title=David_Strathairn&oldid=1382133732 |  |
+| tt9770150 | 3 | nm9584508 | Linda May | actress |  |  |  |  | No Wikidata item found for this IMDb ID |
+
+_20431 rows in total, first 30 shown._
+
+### Methodological explanation
+
+TODO (written by the team)
 
 ## Streaming data processing
 
