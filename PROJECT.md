@@ -4,8 +4,8 @@
 
 | Name | GitHub | Email |
 | --- | --- | --- |
-| Lisa | Lisa7577 | TODO |
-| Ariane | arianemina | TODO |
+| Lisa | Lisa7577 | l.elgabteni7@gmail.com |
+| Ariane | arianemina | ariane.mina@yahoo.com |
 
 ## Requirements
 
@@ -25,6 +25,28 @@ pip install -r requirements.txt
 
 Spark memory can be tuned with environment variables, for example
 `export SPARK_DRIVER_MEMORY=6g` on a machine with less RAM.
+
+### Alternative: Docker (also starts Kafka)
+
+The streaming part needs a Kafka broker, which is provided by
+`docker-compose.yml`. The same file starts a `spark` container with Python
+3.12, Java 17 and the pinned `requirements.txt`, so nothing but Docker is
+needed on the host (useful when the local Java version is not supported by
+Spark).
+
+```bash
+docker compose up -d --build        # Kafka + spark container
+docker compose exec spark scripts/run_preparation.sh
+```
+
+Every `python -m ...` or `scripts/...` command of this guide can be run in
+the container by prefixing it with `docker compose exec spark`. The
+container reads and writes the repository folder, so `data/` and `output/`
+are shared with the host. The default driver memory in the container is
+2 GB (Docker Desktop with 4 GB); set `SPARK_DRIVER_MEMORY` before
+`docker compose up` to change it. Stop everything with `docker compose down`;
+`docker compose down -v` also deletes the Spark temporary files (they can
+take several GB after a job that crashed) and the Spark packages cache.
 
 ## Data download
 
@@ -72,6 +94,14 @@ Thresholds (minimum votes, z-score, success rating) can be changed with the
 environment variables listed at the top of each script. Results go to
 `output/exploration`.
 
+## Data enrichment
+
+TODO
+
+## Streaming data processing
+
+TODO
+
 ## Tests
 
 ```bash
@@ -82,4 +112,10 @@ The tests run on a small hand written sample and do not need the IMDb files.
 
 ## AI tools used
 
-TODO
+| Tool | Used by | Tasks |
+| --- | --- | --- |
+| Claude Code (Anthropic) | Ariane | Code of the Docker/Kafka environment, the data enrichment pipeline, the streaming pipeline and their tests |
+| TODO | Lisa | TODO |
+
+The methodological explanations and reasoning in `REPORT.md` were written
+by the group members without AI tools.

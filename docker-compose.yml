@@ -1,0 +1,59 @@
+# Local stack: single-node Kafka (KRaft mode) and a Python/Java container
+# that runs every Spark job of the project. See PROJECT.md.
+services:
+  kafka:
+    image: apache/kafka:3.9.1
+    container_name: kafka
+    ports:
+      - "9094:9094"   # access from the host machine
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: INTERNAL://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://localhost:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_NUM_PARTITIONS: 3
+      KAFKA_LOG_RETENTION_HOURS: 24
+      KAFKA_HEAP_OPTS: "-Xms256m -Xmx512m"
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 10s
+      retries: 12
+
+  spark:
+    build: .
+    image: ece-bigdata-spark:latest
+    container_name: spark
+    depends_on:
+      kafka:
+        condition: service_healthy
+    ports:
+      - "4040:4040"   # Spark UI of the running job
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      # Sized for Docker Desktop with 4 GB of memory; raise it if you can.
+      SPARK_DRIVER_MEMORY: ${SPARK_DRIVER_MEMORY:-2g}
+      SPARK_SHUFFLE_PARTITIONS: ${SPARK_SHUFFLE_PARTITIONS:-16}
+      SPARK_IVY_DIR: /ivy
+      # Wikimedia requires a User-Agent with contact information; clients
+      # without one are limited to 10 requests/minute (200 with it).
+      WIKI_USER_AGENT: ${WIKI_USER_AGENT:-ECEBigDataProject/1.0 (https://github.com/arianemina/ece-big-data-project) python-requests}
+    volumes:
+      - ./:/app
+      - ivy-cache:/ivy
+      # Spark shuffle/spill files. A crashed job leaves them behind, so they
+      # live in a named volume (emptied by `docker compose down -v`) instead
+      # of growing the container layer.
+      - spark-tmp:/tmp
+
+volumes:
+  ivy-cache:
+  spark-tmp:

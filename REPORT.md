@@ -668,3 +668,11 @@ _5 rows in total._
 ### Methodological explanation
 
 TODO (written by the team)
+
+## Data enrichment
+
+TODO
+
+## Streaming data processing
+
+TODO
