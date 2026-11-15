@@ -799,10 +799,14 @@ For Q3, an alternative would have been to use a different minimum vote
 threshold, or the median rating instead of the mean. We kept our approach
 because it is less sensitive to titles with very few votes.
 
-For Q5, an alternative would have been to compute the average rating of each
-season instead of keeping only the best and worst episodes. We chose
-best/worst because it highlights the spread within a season, which an average
-would hide.
+For Q5, the question asks for the best and the worst episode, so we had to
+keep that. The choice we made is on ties: when several episodes share the
+best or the worst rating, all of them must be in the right seasons. An
+alternative would have been to keep only one of these episodes (for example
+the one with the most votes), which would give more series. We could also
+have changed the minimum of 20 votes per episode: a higher threshold makes
+the ratings more reliable but removes small series, and a lower one keeps
+more series but with episodes rated by very few people.
 
 For Q8, an alternative would have been to ignore the credits from `title.crew`
 and count only `title.principals`. We included `title.crew` so that directors
