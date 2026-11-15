@@ -795,11 +795,18 @@ the akas marked as original were the best option we had. For Q7 we could have
 split careers by age instead of the middle year, but the birth year is missing
 for a lot of actors, so we would have lost many of them.
 
-For Q3 an alternative would have been to use a different minimum vote threshold, or the median rating instead of the mean. We kept our approach because it is less sensitive to titles with very few votes.
+For Q3, an alternative would have been to use a different minimum vote
+threshold, or the median rating instead of the mean. We kept our approach
+because it is less sensitive to titles with very few votes.
 
-Q5 an alternative would have been to compute the average rating of each season instead of keeping only the best and worst episodes. We chose best/worst because it highlights the spread within a season, which an average would hide.
+For Q5, an alternative would have been to compute the average rating of each
+season instead of keeping only the best and worst episodes. We chose
+best/worst because it highlights the spread within a season, which an average
+would hide.
 
-and for Q8 an alternative would have been to ignore the credits from title.crew and count only title.principals. We included title.crew so that directors and writers are not under-counted.
+For Q8, an alternative would have been to ignore the credits from `title.crew`
+and count only `title.principals`. We included `title.crew` so that directors
+and writers are not under-counted.
 
 ## Data enrichment
 
