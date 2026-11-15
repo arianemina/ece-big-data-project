@@ -135,9 +135,19 @@ ids that point to nothing in another table (orphans).
 
 When cleaning, we tried not to throw away rows that are still useful. Wrong
 years are set to null and the row gets a `dq_` flag instead of being deleted.
-Rows that link to a title or a person that doesn't exist are removed, which
-is why akas, episodes and principals lose a few thousand rows. The clean
-tables are saved in Parquet so the next steps run faster.
+Rows that link to a title or a person that doesn't exist are removed: 4,927
+rows for akas, 822 for episodes and 7,403 for principals. The clean tables are
+saved in Parquet so the next steps run faster.
+
+We could have deleted every row with an impossible value, which is simpler,
+but we would lose the rest of the information on these titles and people (a
+film with a wrong year still has a correct rating). We also thought about
+guessing the missing values, for example filling a runtime with the median of
+its genre, but that would create data that doesn't exist and change the
+results of the exploration, so we kept them as null. For the orphans we did
+the opposite and removed them, because a credit that points to no person
+can't be used in any join. We could also have kept the data in TSV, but
+Parquet is compressed and keeps the types, so it is much faster to read again.
 
 ## Data exploration
 
@@ -769,6 +779,22 @@ Q8 we took the roles from principals and crew, kept people with at least two
 roles (each on 3+ movies), and compared their movies with one role and with
 several roles.
 
+For Q1 we first tried a normal z-score on the runtime, but because of the very
+long films it only found the extreme cases, so we changed to the robust
+version. A fixed range (for example under 60 or over 180 minutes) would be
+simpler, but it ignores that a long documentary is not the same as a long
+comedy. For Q2 we could have measured popularity with the average rating
+instead of the votes, but a genre with a few very good films would then win
+even if almost nobody watched them. Counting the number of movies was another
+option, but it shows what is produced, not what people watch.
+
+For Q6 we could have guessed the language from the country of the film only,
+or with a language detection tool on the title. But many countries have
+several languages and titles are too short to detect a language reliably, so
+the akas marked as original were the best option we had. For Q7 we could have
+split careers by age instead of the middle year, but the birth year is missing
+for a lot of actors, so we would have lost many of them.
+
 ## Data enrichment
 
 ### Selected films and principals
@@ -923,6 +949,23 @@ of each film (or the introduction if there is none), cleans the text and
 joins it back to IMDb. Each row keeps its source (link, revision, date,
 license) and a note explaining why some data is missing. About 95 % of the
 films and 87 % of the people got a text.
+
+We could have downloaded the HTML pages of Wikipedia and parsed them, but the
+API already gives the plain text and is lighter for the servers. We could also
+have searched the article by the film title, but many films share the same
+title (remakes, a film and a book with the same name), so going through the
+IMDb id in Wikidata is much more reliable. Another source like TMDB also has
+good synopses, but it needs an API key and its terms of use are stricter,
+while Wikipedia (CC BY-SA) and Wikidata (CC0) are free to reuse. The download
+is in Python and not in Spark because the limit is the number of requests per
+minute, not the computing power: running it in parallel would only get us
+blocked.
+
+The selection is only a parameter. With `ENRICH_TOP_N=0` and
+`ENRICH_PRINCIPALS=0`, the same code takes every film and every principal. The
+Spark part works the same way on more data, but the download would take much
+longer (already about one hour for our sample), so for the full dataset it
+would be better to use the Wikidata and Wikipedia dumps instead of the API.
 
 ## Streaming data processing
 
@@ -1124,6 +1167,20 @@ go to three Parquet outputs: every matched edit, the edits per IMDb entity
 per window, and the total traffic per window. In our 33-minute test, 139
 edits matched 111 IMDb entities, so around 3 to 5 % of the edits.
 
+A longer watermark (for example 30 minutes) would have kept the replayed
+events in the windows, but every window would be shown much later and Spark
+would keep more state in memory. A shorter one gives results faster but loses
+more late edits. We chose 10 minutes because normal events arrive in a few
+seconds. We used the append mode, so each window is written only once, when it
+is final, which fits well with Parquet files. The update mode would show the
+windows earlier and change them when new events arrive, but Spark can't use it
+with a file sink and the results would keep changing.
+
+For the filter, we could have used keywords like "film" or "actor" in the page
+title, but most film articles don't contain these words and many other pages
+do, so comparing with the titles built from IMDb is much more precise. The
+downside is that we only find the films and people that are in our table.
+
 ## Open question
 
 ### Question, motivation and additional data
@@ -1324,3 +1381,13 @@ foreign countries per decade. For the ratings part, each film is labelled
 US only, mixed or abroad only. Since recent films have more votes and more
 foreign actors at the same time, we compared each film to the average of its
 own year before comparing the groups.
+
+We could have used the nationality (P27) instead of the birthplace. It is
+closer to the idea of being a foreigner, but many people have several
+nationalities in Wikidata, while they usually have only one birthplace, which
+is easier to count. We also thought about using the original language of the
+film, but as seen in Q6, IMDb doesn't give it and we would have had to guess
+it again. For the ratings part, a regression model with the year, the genre
+and the group as variables would control more things at once, but it is
+harder to explain, and comparing each film to the average of its year already
+removes the main effect we were worried about.
