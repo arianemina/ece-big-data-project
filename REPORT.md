@@ -757,7 +757,7 @@ rating from five people doesn't mean much.
 For Q1, runtimes are very skewed (some art films last days), so a normal
 z-score only catches the extreme ones. We used a robust z-score on the log of
 the runtime, with the median and the MAD of each genre, and kept films with
-|z| >= 3.5. This way we also find films that are much shorter than usual.
+`|z| >= 3.5`. This way we also find films that are much shorter than usual.
 For Q2 the popularity of a genre in a year is the total number of votes of
 its movies, and we keep the three highest. For Q3 we compared these three
 genres with the rest using their share of votes, votes per movie and a
@@ -794,6 +794,23 @@ several languages and titles are too short to detect a language reliably, so
 the akas marked as original were the best option we had. For Q7 we could have
 split careers by age instead of the middle year, but the birth year is missing
 for a lot of actors, so we would have lost many of them.
+
+For Q3, an alternative would have been to use a different minimum vote
+threshold, or the median rating instead of the mean. We kept our approach
+because it is less sensitive to titles with very few votes.
+
+For Q5, the question asks for the best and the worst episode, so we had to
+keep that. The choice we made is on ties: when several episodes share the
+best or the worst rating, all of them must be in the right seasons. An
+alternative would have been to keep only one of these episodes (for example
+the one with the most votes), which would give more series. We could also
+have changed the minimum of 20 votes per episode: a higher threshold makes
+the ratings more reliable but removes small series, and a lower one keeps
+more series but with episodes rated by very few people.
+
+For Q8, an alternative would have been to ignore the credits from `title.crew`
+and count only `title.principals`. We included `title.crew` so that directors
+and writers are not under-counted.
 
 ## Data enrichment
 
